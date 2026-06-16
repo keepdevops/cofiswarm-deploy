@@ -1,0 +1,24 @@
+# Project environment for the Swarm Matrix stack.
+#
+# Sourced (with `set -a`) by orchestration/lifecycle/launch.py on every
+# `brewctl up` / `brewctl launch`, so these exports are inherited by the
+# coordinator and proxy without polluting your global shell profile.
+
+# Per-agent wall-clock budget for the cascade/flat parallel broadcast, in
+# seconds. When an agent exceeds it the coordinator cancels that stream, keeps
+# its partial output, and releases the synthesis barrier so a slow/runaway
+# proposer can't stall the whole run. 0 disables the cap (built-in default 90).
+export MATRIX_CASCADE_AGENT_DEADLINE_SECS=90
+
+# Bind host for the coordinator and proxy listeners. Default 0.0.0.0 so the
+# server/dev stack is reachable on the LAN. Non-networked desktop/license
+# builds pin loopback by overriding this in matrix-env.local.sh:
+#   export MATRIX_BIND_HOST=127.0.0.1
+export MATRIX_BIND_HOST=0.0.0.0
+
+# Machine-specific overrides (e.g. MATRIX_LLAMA_SERVER pointing at your local
+# llama.cpp build) live in matrix-env.local.sh, which is gitignored so absolute
+# paths never get committed. Sourced here if present.
+_matrix_env_local="$(dirname "${BASH_SOURCE[0]}")/matrix-env.local.sh"
+[ -f "$_matrix_env_local" ] && source "$_matrix_env_local"
+unset _matrix_env_local
