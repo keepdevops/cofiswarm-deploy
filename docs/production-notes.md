@@ -1,22 +1,17 @@
 # Production deployment (UI)
 
-Cofiswarm keeps **inference on the host** (Metal / GPU): `llama-server`, `coordinator`, and the **C++ `proxy`** on port **3002**. Only the **React UI** is a good fit for a container.
+Cofiswarm keeps **inference on the host** (Metal / GPU): `llama-server`, MLX servers, and **dispatch** on port **8010**. The **React UI** runs in Docker on **:3000** and proxies `/api/*` → dispatch.
 
-## Quick install (production)
-
-From the **repository root** (or `bash production/install.sh` from anywhere):
+## Quick start (post-migration)
 
 ```bash
-bash production/install.sh
+cd ~/cofiswarm/repos/cofiswarm-deploy
+make ui-build && make up
+open http://127.0.0.1:3000
+make test-ui-ops-gate
 ```
 
-This runs **`scripts/build_coordinator.sh`** (builds `coordinator` and `proxy`), then **`npm ci`**. It **sources** `scripts/matrix-env.sh` when present so `MATRIX_*` is set for later commands.
-
-- **Also build the nginx UI image:**  
-  `bash production/install.sh --with-docker`  
-  or `MATRIX_PROD_DOCKER=1 bash production/install.sh`
-
-For a **full macOS** setup (Homebrew, pixi, optional `llama-server` build, model downloads), use **`scripts/install.sh`** instead.
+Legacy **proxy :3002** (`cofiswarm-gateway`) is archived — use UI nginx on :3000 instead.
 
 ## 1. Host: proxy + API
 
@@ -53,14 +48,14 @@ Open **http://localhost** (port 80). The browser calls **`/api/*`**, nginx proxi
 
 | Variable | Where | Purpose |
 |----------|--------|---------|
-| `REACT_APP_API_BASE` | **Build time** (CRA) | e.g. `/api` for same-origin, or `http://localhost:3002/api` for dev |
+| `REACT_APP_API_BASE` | **Build time** (CRA) | `/api` for same-origin via UI nginx → dispatch :8010 |
 | `MATRIX_LAUNCH_MODE` | **Runtime** (shell) | `1` = Docker UI, `2` = bare metal (`scripts/launch_matrix.sh`) |
 | `MATRIX_MODEL_DIR` | **Runtime** (proxy) | Directory containing `.gguf` files and MLX model folders |
 | `MATRIX_LLAMA_SERVER` | **Runtime** | Path to `llama-server` binary |
 | `MATRIX_ACTIVE_CONFIG` | **Runtime** | Active config (default `/tmp/matrix-active-config.json`) |
 | `MATRIX_SLOTS_DIR` | **Runtime** | llama-server `--slot-save-path` (default `/tmp/matrix-slots`) |
 | `MATRIX_MLX_PYTHON` | **Runtime** | Python for `mlx_lm.server` (defaults to pixi mlx env or `python3`) |
-| `MATRIX_PROXY_PORT` | **Runtime** | Proxy listen port (default **3002**). If changed, update **`production/nginx.conf`** `proxy_pass` and React **`REACT_APP_API_BASE`**. |
+| `MATRIX_PROXY_PORT` | **Runtime** | Legacy proxy port (**3002**, archived). Use `make up` + UI :3000. |
 | `MATRIX_COORDINATOR_PORT` | **Runtime** | Coordinator HTTP port (default **8000**) |
 | `MATRIX_COORDINATOR_URL` | **Runtime** | (`proxy.mjs` only) Full coordinator base URL |
 

@@ -70,7 +70,7 @@ JSON snapshots for sprint signoff gates.
 
 ## Future work
 
-SSE streaming infer through dispatch, gateway :3002, adapter forwarding, SCALE-3+ load raises.
+SSE streaming infer through dispatch :8010, UI nginx :3000, adapter forwarding, SCALE-3+ load raises.
 
 ---
 
