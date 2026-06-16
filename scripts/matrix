@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Wrapper so `matrix up` works when this dir is on PATH.
+set -euo pipefail
+MONO="${COFISWARM_MONOREPO:-$HOME/cofiswarmdev}"
+exec node "${MONO}/bin/matrix.mjs" "$@"

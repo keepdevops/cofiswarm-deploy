@@ -1,0 +1,92 @@
+# SCALE-2 architecture context (~2k tokens target for KV prefill stress).
+# Excerpt pattern repeated to exercise long prefill without external files.
+
+## System overview
+
+The cofiswarm control plane separates concerns across dispatch, mode plugins, slot-manager,
+agent-registry, and configure. Dispatch accepts architect prompts and relays to mode plugins
+on ports 8021-8024 (with macOS fallback ports when 8021 is taken). Mode plugins load the
+swarm roster and call llama-server OpenAI-compatible endpoints per agent port.
+
+## Data plane
+
+Inference runs on llama-server processes spawned by configure. Each server group shares a port
+and parallel slots. KV pressure is observed via slot-manager GET /api/pressure which queries
+/props and /slots on each endpoint. Usage is kv_used / (n_ctx * total_slots).
+
+## Orchestration modes
+
+Flat broadcasts to agents (optionally filtered via mode_config.agents). Pipeline stages
+outputs agent-to-agent. Cascade runs agents then synthesis. Router uses foreman classifier
+SELECTED line to pick agents.
+
+## Storage
+
+Sessions and history live under FHS var/lib/cofiswarm/dispatch. RAG uses postgres pgvector on
+port 5433. UI nginx gateways /api/* to backend services.
+
+## SCALE gate
+
+Nominal workload P1-P4 exercises decode, codegen, long context, and router selection.
+Peak KV usage must stay below 0.60 to advance load sprints. WARN band is 0.60-0.74.
+
+## Component diagram (logical)
+
+```
+UI:3000 → dispatch:8010 → mode-flat|pipeline|cascade|router → llama:808x
+                ↓
+         agent-registry:8012
+         slot-manager:8013 → pressure API
+```
+
+## Deployment
+
+make up runs docker ui profile plus host Go/Python services. launchd optional stack-up at
+login. MATRIX_LLAMA_SERVER points to llama-server binary for configure spawn.
+
+## Testing
+
+test-scale0-workload runs P1/P2/P4 across modes. test-scale2-workload adds P3 long context
+and concurrent flat sessions. Artifacts land in var/lib/cofiswarm/deploy/*.json.
+
+## Memory model
+
+M3 Max 36GB caps coordinator memory note. ctx_cap divided by parallel sets per-slot KV budget.
+Quantization q4_0/q8_0 on cache types reduces footprint. MLX scout on separate port 8083.
+
+## Failure modes
+
+Configure requires slots directory and llama binary. mode-flat port conflicts with macOS
+launchd on 8021 — stack picks 8121 or 8221. Dispatch waits for ready ports after stack-up.
+
+## Security
+
+Localhost bind on infer ports. CORS open on dev APIs. Production would gate UI and TLS terminate.
+
+## Observability
+
+observer:8016, zmq-bridge, host-services logs under var/log/cofiswarm/host-services. Pressure
+JSON snapshots for sprint signoff gates.
+
+## Future work
+
+SSE streaming infer through dispatch, gateway :3002, adapter forwarding, SCALE-3+ load raises.
+
+---
+
+Repeat section for token mass: architecture decisions should document module boundaries,
+agent responsibilities, inference backend selection, and mode-specific reducers. Each agent
+carries system_prompt, port, model path, ctx_cap, max_concurrency, and optional draft model
+for speculative decode. Server groups colocate agents sharing the same weights file.
+
+Repeat section for token mass: architecture decisions should document module boundaries,
+agent responsibilities, inference backend selection, and mode-specific reducers. Each agent
+carries system_prompt, port, model path, ctx_cap, max_concurrency, and optional draft model
+for speculative decode. Server groups colocate agents sharing the same weights file.
+
+Repeat section for token mass: architecture decisions should document module boundaries,
+agent responsibilities, inference backend selection, and mode-specific reducers. Each agent
+carries system_prompt, port, model path, ctx_cap, max_concurrency, and optional draft model
+for speculative decode. Server groups colocate agents sharing the same weights file.
+
+Question: Summarize the control-plane vs data-plane split and list the four mode plugins.

@@ -29,18 +29,19 @@ services:
       timeout: 3s
       retries: 10
 
-  # Optional UI container — build from cofiswarm-ui when enabled.
   ui:
-    image: nginx:alpine
-    container_name: cofiswarm-ui-stub
+    build:
+      context: ${COFISWARM_REPOS_ROOT:?}/cofiswarm-ui
+      dockerfile: deploy/Dockerfile
+    image: cofiswarm-ui:local
+    container_name: cofiswarm-ui
     profiles: ["16gb", "32gb"]
     ports:
       - "3000:80"
-    volumes:
-      - ../config/gateway/nginx-stub.conf:/etc/nginx/conf.d/default.conf:ro
     extra_hosts:
       - "host.docker.internal:host-gateway"
     restart: unless-stopped
+    depends_on: []
 
 volumes:
   pgvector_data:

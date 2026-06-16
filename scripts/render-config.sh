@@ -15,6 +15,8 @@ install -d "${FHS}/etc/cofiswarm/config/agents" \
          "${FHS}/var/lib/cofiswarm/dispatch/history" \
          "${FHS}/var/lib/cofiswarm/rag/index" \
          "${FHS}/var/lib/cofiswarm/observer/plugins" \
+         "${FHS}/var/lib/cofiswarm/launcher" \
+         "${FHS}/var/lib/cofiswarm/models/llama/slots" \
          "${FHS}/var/log/cofiswarm/agent_logs" \
          "${FHS}/run/cofiswarm"
 
