@@ -8,7 +8,7 @@
   <array>
     <string>/bin/bash</string>
     <string>-lc</string>
-    <string>cd "${COFISWARM_DEPLOY:-$HOME/cofiswarm/repos/cofiswarm-deploy}" &amp;&amp; ./scripts/stack-up.sh</string>
+    <string>cd "${COFISWARM_DEPLOY:-$HOME/cofiswarm/repos/cofiswarm-deploy}" &amp;&amp; make up</string>
   </array>
   <key>RunAtLoad</key>
   <true/>
