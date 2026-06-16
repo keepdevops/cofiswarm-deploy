@@ -347,13 +347,13 @@
     "cofiswarm-mode-pipeline": "8b85a29c189ce91af6b8448a9c027533d6c7abf0",
     "cofiswarm-mode-cascade": "74bb68788b774fe703e07aa7da5bfc3f57e2fb9d",
     "cofiswarm-mode-router": "8d2b9f9e3c242b2ab67b8aca13cf6afeb0b4f247",
-    "cofiswarm-infer-vllm": "43ae530506630eb14867d2efd5b4935c65cd5d3b",
+    "cofiswarm-infer-vllm": "9317ecf41581b7a88b6be8e34baf1d10a99b08cb",
     "cofiswarm-infer-sglang": "3699b46616814962959113feef82ed48ae93556c",
     "cofiswarm-infer-ollama": "26f7c85460b0fd319e32b7b41a96c0b93f4a251f",
     "cofiswarm-backend-vllm": "dec8545e1575bafd8214871d949c51e3ce28763c",
-    "cofiswarm-adapter-openai-compat": "fc5ea33f87712334bbc1d9d7479b491eaa56b68d",
-    "cofiswarm-tools": "1185de73f1c0e8ebbc1d3a698465f48d1eb2f5eb",
-    "cofiswarm-adapter-agentic": "68514a3137977c4461c9bc50d2d0dea3b3d1f1e3",
+    "cofiswarm-adapter-openai-compat": "bbde8170ef4aa012e00e6f3603dda379e781b50a",
+    "cofiswarm-tools": "1f5068b6cf9a716603faaa20689728371ecc6300",
+    "cofiswarm-adapter-agentic": "2f62731792335f0602be31a1b0f9226e74bf37d9",
     "cofiswarm-grafana": "0d44180e767a89e20d19adb6a40d1529c5cd8c43",
     "cofiswarm-pgvector": "8a6af722692c1a326c0f9201f6ecedfb8744359e"
   }
