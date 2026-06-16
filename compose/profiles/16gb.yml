@@ -1,0 +1,6 @@
+# 16 GB — default dev profile (5 server_groups from swarm-config).
+services:
+  pgvector:
+    profiles: ["16gb"]
+  ui:
+    profiles: ["16gb"]

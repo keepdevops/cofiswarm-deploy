@@ -1,20 +1,32 @@
 # cofiswarm-deploy
 
-Cofiswarm component: `deploy`.
+Stack orchestration — FHS config render + compose profiles + host service launcher.
 
-- Layout: [REPO-STANDARD-LAYOUT](https://github.com/keepdevops/cofiswarmdev/blob/main/docs/REPO-STANDARD-LAYOUT.md)
-- Migration: [MIGRATION-SPRINTS](https://github.com/keepdevops/cofiswarmdev/blob/main/docs/MIGRATION-SPRINTS.md)
-
-## FHS paths
-
-| Path | Purpose |
-|------|---------|
-| `/etc/cofiswarm/deploy/` | config |
-| `/var/lib/cofiswarm/deploy/` | state |
-| `/var/log/cofiswarm/deploy/` | logs |
-
-## Test
+## Quick start
 
 ```bash
-./test/scripts/assert-layout.sh deploy
+cp .env.example .env
+make render-config
+make compose-config
+make stack-up      # docker pgvector + host Go services
+make stack-down
 ```
+
+## FHS mounts (Sprint 13)
+
+| Host path | Consumers |
+|-----------|-----------|
+| `~/cofiswarm/fhs/etc/cofiswarm` | all services (`:ro` in compose) |
+| `~/cofiswarm/fhs/var/lib/cofiswarm` | dispatch, rag, slot-manager, models |
+| `~/cofiswarm/fhs/var/log/cofiswarm` | infer, agent_logs |
+| `~/cofiswarm/fhs/run/cofiswarm` | zmq-bridge, host service PIDs |
+
+## Profiles
+
+| Profile | Compose | Host infer |
+|---------|---------|------------|
+| `8gb` | pgvector | gemma2b (scout) |
+| `16gb` | pgvector + ui stub | full server_groups |
+| `32gb` | pgvector + ui stub | full roster |
+
+Gate: `make test` → SCALE-0 (`test/gates/SCALE-0.md`).

@@ -1,0 +1,4 @@
+# 8 GB — scout + gemma2b on host; pgvector only in compose.
+services:
+  pgvector:
+    profiles: ["8gb"]

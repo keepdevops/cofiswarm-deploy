@@ -1,0 +1,6 @@
+# 32 GB — full roster + UI stub.
+services:
+  pgvector:
+    profiles: ["32gb"]
+  ui:
+    profiles: ["32gb"]

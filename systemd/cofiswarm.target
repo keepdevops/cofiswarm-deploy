@@ -1,0 +1,7 @@
+[Unit]
+Description=Cofiswarm stack (host services + compose profile)
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Install]
+WantedBy=multi-user.target
