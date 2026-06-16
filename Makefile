@@ -1,6 +1,6 @@
 ROLE := deploy
 .PHONY: test render-config compose-config stack-up stack-down test-scale0-gate
-test: test-standalone-layout test-scale0-gate
+test: test-standalone-layout test-scale0-gate test-cutover-gate
 test-standalone-layout:
 	./test/scripts/assert-layout.sh $(ROLE)
 render-config:
@@ -16,3 +16,6 @@ stack-down:
 	./scripts/stack-down.sh
 test-scale0-gate:
 	./test/scripts/test-scale0-gate.sh
+
+test-cutover-gate:
+	./test/scripts/test-cutover-gate.sh
