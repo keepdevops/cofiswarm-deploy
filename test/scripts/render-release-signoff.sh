@@ -5,7 +5,9 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 MONO="${MONOREPO:-$HOME/cofiswarmdev}"
 OUT="${MONO}/docs/DEVICE-RELEASE-SIGNOFF.md"
 
-"${ROOT}/test/scripts/test-release-signoff-gate.sh"
+if [[ "${RELEASE_SKIP_GATE:-}" != "1" ]]; then
+  "${ROOT}/test/scripts/test-release-signoff-gate.sh"
+fi
 
 python3 - "$ROOT/repos.json" "$OUT" <<'PY'
 import datetime, json, sys

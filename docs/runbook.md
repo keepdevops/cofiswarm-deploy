@@ -13,7 +13,7 @@ make observability-up    # optional Prometheus :9090 + Grafana :3030
 
 ```bash
 make observability-down
-make down                # if stack-down target exists; else kill host services manually
+make down
 ```
 
 Or via monorepo: `matrix up` / `matrix down`
@@ -39,11 +39,16 @@ Refresh pins after commits: `./scripts/pin-repos.sh`
 ## Release sign-off (v1.1.0)
 
 ```bash
+./scripts/pin-repos.sh
 make test-release-signoff-gate
-make render-release-signoff
+make render-release-signoff    # skips re-running gate
+make tag-release               # local annotated tags
+make test-release-tag-gate
 ```
 
-Artifacts: `~/cofiswarmdev/docs/MIGRATION-SIGNOFF.md`, `OBSERVABILITY-SIGNOFF.md`, `DEVICE-RELEASE-SIGNOFF.md`
+Or: `make release` (all four steps)
+
+Push tags: `git -C ~/cofiswarm/repos/cofiswarm-deploy push origin v1.1.0`
 
 ## Paste traps
 
