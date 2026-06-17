@@ -12,7 +12,16 @@ repos = doc.get("repos") or []
 pins = doc.get("pins") or {}
 required = [r["name"] for r in repos if r.get("required")]
 archived = {r["name"] for r in repos if r.get("status") == "archived"}
-for key in ("release", "migration_signoff", "observability_signoff", "version"):
+for key in (
+    "release",
+    "migration_signoff",
+    "observability_signoff",
+    "device_ops_signoff",
+    "security_signoff",
+    "ci_signoff",
+    "sidecars_signoff",
+    "version",
+):
     if not doc.get(key):
         raise SystemExit(f"fail: repos.json missing {key}")
 if "cofiswarm-gateway" not in archived:

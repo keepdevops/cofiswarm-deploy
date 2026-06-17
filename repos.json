@@ -8,14 +8,14 @@
       "role": "meta",
       "phase": 0,
       "required": true,
-      "pin": "a2a4aef57e3a4cb6395c1a2d8b707f249000d131"
+      "pin": "2e5e0da831a8b6ab1c390e40f96450ca21f7ab7a"
     },
     {
       "name": "cofiswarm-common",
       "role": "contract",
       "phase": 0,
       "required": true,
-      "pin": "9baebdf4bc8827e479e0e48be166df3fb001570c"
+      "pin": "76f93540cc86f856ea40ec5e319a5113f93c0f65"
     },
     {
       "name": "cofiswarm-docs",
@@ -37,7 +37,7 @@
       "role": "ui",
       "phase": 1,
       "required": true,
-      "pin": "3dc2bd747ebc325b353b78258a71fd1a6d5c080e"
+      "pin": "c7047f3e2ccc30dbd0c6ddfb1fdddbc039f647da"
     },
     {
       "name": "cofiswarm-stream-sdk",
@@ -188,7 +188,7 @@
       "role": "job",
       "phase": 3,
       "required": true,
-      "pin": "1c6334a728e2c13434efef72d824f78247d09be3"
+      "pin": "f10e4933de06b534111c5825439a226ec599c1f6"
     },
     {
       "name": "cofiswarm-e2e",
@@ -314,11 +314,11 @@
   "cutover": "v3.0.0-bridge",
   "monorepo_tag": "v3.0.0-bridge",
   "pins": {
-    "cofiswarm-deploy": "a2a4aef57e3a4cb6395c1a2d8b707f249000d131",
-    "cofiswarm-common": "9baebdf4bc8827e479e0e48be166df3fb001570c",
+    "cofiswarm-deploy": "2e5e0da831a8b6ab1c390e40f96450ca21f7ab7a",
+    "cofiswarm-common": "76f93540cc86f856ea40ec5e319a5113f93c0f65",
     "cofiswarm-docs": "7db0565571d21abce60bb6cf8a93af2cb7f2d2a7",
     "cofiswarm-gateway": "dd0ff26f756cd9b8ee6f03accf2985cdbed07636",
-    "cofiswarm-ui": "3dc2bd747ebc325b353b78258a71fd1a6d5c080e",
+    "cofiswarm-ui": "c7047f3e2ccc30dbd0c6ddfb1fdddbc039f647da",
     "cofiswarm-stream-sdk": "f2100c43a2242a8980e02dafb1104de9db3124cb",
     "cofiswarm-coordinator": "3292036b4f199ab17bf5a6abf797c69850d86dfb",
     "cofiswarm-proxy": "bf98c08ef7b62b21e8076015b2f5db976beb20f1",
@@ -339,7 +339,7 @@
     "cofiswarm-observer": "d214783bf32515e3885f4813c277c0c92d409216",
     "cofiswarm-observer-sdk": "3d7cc057ca645c433e62aad1790d5d3bccbdefe0",
     "cofiswarm-zmq-bridge": "a5640a103212481532eac1c78f6c7ba99b662bf9",
-    "cofiswarm-rag-worker": "1c6334a728e2c13434efef72d824f78247d09be3",
+    "cofiswarm-rag-worker": "f10e4933de06b534111c5825439a226ec599c1f6",
     "cofiswarm-e2e": "87b57c18bb18e49f153c76deafbbe031e9c8a3d6",
     "cofiswarm-dispatch": "51746e2430bd527a4f6d0c855d520d3b9a07ab6a",
     "cofiswarm-mode-sdk": "c1220436b886dc96e1e5412b8f5d3ae7f03b10b8",
@@ -359,5 +359,9 @@
     "cofiswarm-pgvector": "8a6af722692c1a326c0f9201f6ecedfb8744359e"
   },
   "migration_signoff": "v1.1.0",
-  "observability_signoff": "v1.1.0"
+  "observability_signoff": "v1.1.0",
+  "device_ops_signoff": "v1.1.0",
+  "security_signoff": "v1.1.0",
+  "ci_signoff": "v1.1.0",
+  "sidecars_signoff": "v1.1.0"
 }

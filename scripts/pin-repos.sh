@@ -31,6 +31,10 @@ doc["version"] = "1.1.0"
 doc["release"] = "v1.1.0"
 doc["migration_signoff"] = "v1.1.0"
 doc["observability_signoff"] = "v1.1.0"
+doc["device_ops_signoff"] = "v1.1.0"
+doc["security_signoff"] = "v1.1.0"
+doc["ci_signoff"] = "v1.1.0"
+doc["sidecars_signoff"] = "v1.1.0"
 repos_file.write_text(json.dumps(doc, indent=2) + "\n")
-print(f"pinned {sum(1 for v in pins.values() if v)} repos → {doc['release']} (migration + observability signoff)")
+print(f"pinned {sum(1 for v in pins.values() if v)} repos → {doc['release']} (post-migration signoffs v1.1.0)")
 PY

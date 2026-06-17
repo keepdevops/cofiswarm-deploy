@@ -80,6 +80,14 @@ COFISWARM_CI_LIVE=1 make test-ci-signoff-gate   # + pins + stack health on devic
 
 Workflow: `.github/workflows/ci.yml` (Node **24**, `actions/setup-node@v6`, runs on push/PR to `main`).
 
+## Post-migration capstone (Sprint 46)
+
+```bash
+./scripts/pin-repos.sh
+make post-migration
+POST_MIGRATION_LIVE=1 make post-migration-live   # + sidecars + device ops (stack up)
+```
+
 ## Paste traps
 
 - Do **not** paste inline `# comments` on the same line as `make` targets.
