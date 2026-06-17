@@ -22,7 +22,13 @@ install -d "${FHS}/etc/cofiswarm/config/agents" \
 
 OBS_PLUGINS="${REPOS}/cofiswarm-observer/plugins"
 if [[ -d "$OBS_PLUGINS" ]]; then
-  cp -f "${OBS_PLUGINS}"/*.yaml "${FHS}/var/lib/cofiswarm/observer/plugins/" 2>/dev/null || true
+  install -d "${FHS}/var/lib/cofiswarm/observer/plugins"
+  for f in "${OBS_PLUGINS}"/*.yaml; do
+    [[ -f "$f" ]] || continue
+    sed -e "s|/var/log/cofiswarm|${FHS}/var/log/cofiswarm|g" \
+        -e "s|/var/lib/cofiswarm|${FHS}/var/lib/cofiswarm|g" \
+        "$f" > "${FHS}/var/lib/cofiswarm/observer/plugins/$(basename "$f")"
+  done
 fi
 
 if [[ -d "${CFG_REPO}/config/agents" ]]; then
