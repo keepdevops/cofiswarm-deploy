@@ -18,8 +18,8 @@ curl -sf --max-time 5 "http://${HOST}:8016/healthz" >/dev/null || {
 curl -sf --max-time 5 "http://${HOST}:8016/v1/plugins" | grep -q metrics.yaml || {
   echo "fail: /v1/plugins missing metrics.yaml" >&2; exit 1
 }
-curl -sf --max-time 5 "http://${HOST}:8016/metrics" | grep -q cofiswarm || {
-  echo "fail: /metrics stub missing" >&2; exit 1
+curl -sf --max-time 5 "http://${HOST}:8016/metrics" | grep -q cofiswarm_kv_pressure_usage || {
+  echo "fail: /metrics missing cofiswarm_kv_pressure_usage (run make build-observer && make up)" >&2; exit 1
 }
 
 echo "ok: observer ops — ${count} plugins, metrics :8016"

@@ -1,0 +1,15 @@
+# Prometheus scrape config — observer :8016/metrics (Sprint 38).
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: cofiswarm-observer
+    static_configs:
+      - targets: ["host.docker.internal:8016"]
+    metrics_path: /metrics
+
+  - job_name: cofiswarm-slot-manager
+    static_configs:
+      - targets: ["host.docker.internal:8013"]
+    metrics_path: /api/pressure
+    # JSON — use observer aggregation for Grafana; direct scrape optional
