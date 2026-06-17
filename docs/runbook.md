@@ -40,7 +40,7 @@ make test-observability-signoff-gate   # includes optional Prometheus/Grafana
 ## After code changes
 
 ```bash
-CGO_ENABLED=0 make build-dispatch build-modes build-observer
+CGO_ENABLED=0 make build-dispatch build-modes build-observer build-convert
 make ui-build    # after cofiswarm-ui nginx/API changes
 make up
 ```

@@ -29,6 +29,8 @@ probe observer "${HOST}:8016/healthz"
 probe configure "${HOST}:8017/healthz"
 probe zmq-bridge "${HOST}:5555/healthz"
 probe rag "${HOST}:8001/health"
+probe convert "${HOST}:8015/healthz"
+probe rag-worker "${HOST}:8018/healthz"
 
 for spec in \
   "mode-flat:${COFISWARM_MODE_FLAT_PORT:-8021}" \

@@ -223,6 +223,8 @@ start_svc kvpool "${REPOS}/cofiswarm-kvpool/bin/cofiswarm-kvpool"
 start_svc configure "${REPOS}/cofiswarm-launcher/bin/cofiswarm-configure" -listen :8017
 wait_port 8017 configure || true
 start_svc observer "${REPOS}/cofiswarm-observer/bin/cofiswarm-observer" -listen :8016
+start_svc convert "${REPOS}/cofiswarm-convert/bin/cofiswarm-convert" -listen :8015
+wait_port 8015 convert || true
 start_svc zmq-bridge "${REPOS}/cofiswarm-zmq-bridge/bin/cofiswarm-zmq-bridge" \
   -topics "${REPOS}/cofiswarm-zmq-bridge/spec/topics.yaml"
 for spec in \
@@ -245,6 +247,12 @@ start_py_svc rag env \
   PYTHONPATH="${REPOS}/cofiswarm-rag/src" \
   python3 "${REPOS}/cofiswarm-rag/scripts/ingest-server.py"
 wait_port 8001 rag || true
+start_py_svc rag-worker env \
+  COFISWARM_VAR_LIB="${FHS}/var/lib/cofiswarm" \
+  RAG_WORKER_PORT=8018 \
+  PYTHONPATH="${REPOS}/cofiswarm-rag-worker/src" \
+  python3 "${REPOS}/cofiswarm-rag-worker/scripts/run-worker.py"
+wait_port 8018 rag-worker || true
 start_py_svc orchestrate env \
   COFISWARM_CONFIG_ROOT="${FHS}/etc/cofiswarm/config" \
   COFISWARM_COORDINATOR_CONFIG="${COFISWARM_COORDINATOR_CONFIG}" \

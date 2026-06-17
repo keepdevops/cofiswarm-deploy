@@ -1,5 +1,5 @@
 ROLE := deploy
-.PHONY: test render-config compose-config up down ui-build stack-up stack-down test-scale0-gate test-mode-relay-gate test-configure-gate test-configure-live build-dispatch build-modes build-configure build-observer test-scale0-signoff-gate render-scale0-signoff test-scale1-gate test-scale2-gate test-scale2-signoff-gate render-scale2-signoff test-architect-stream-gate test-architect-stream-pipeline-gate install-launchd uninstall-launchd launchd-status test-scale4-gate test-scale4-signoff-gate render-scale4-signoff test-scale5-gate test-scale5-signoff-gate render-scale5-signoff test-scale6-gate test-scale6-signoff-gate render-scale6-signoff test-scale7-gate test-scale7-signoff-gate test-scale7-stream-signoff render-scale7-signoff test-ui-api-gate test-ui-stream-gate test-gateway-cleanup-gate test-ui-ops-gate test-stack-health-gate test-launchd-gate test-launchd-live-gate test-migration-ops-gate test-device-ops-signoff-gate render-device-ops-signoff ops-check test-ui-security-gate test-security-signoff-gate render-security-signoff security test-repos-schema-gate test-ci-static-gate test-ci-signoff-gate render-ci-signoff ci test-repos-pins-gate test-migration-signoff-gate render-migration-signoff pin-repos test-observer-ops-gate test-grafana-layout-gate test-observability-gate test-prometheus-metrics-gate test-prometheus-up-gate observability-up observability-down test-zmq-bridge-gate test-observability-signoff-gate render-observability-signoff test-release-signoff-gate render-release-signoff tag-release test-release-tag-gate release device-ops security ci
+.PHONY: test render-config compose-config up down ui-build stack-up stack-down test-scale0-gate test-mode-relay-gate test-configure-gate test-configure-live build-dispatch build-modes build-configure build-observer build-convert build-sidecars test-scale0-signoff-gate render-scale0-signoff test-scale1-gate test-scale2-gate test-scale2-signoff-gate render-scale2-signoff test-architect-stream-gate test-architect-stream-pipeline-gate install-launchd uninstall-launchd launchd-status test-scale4-gate test-scale4-signoff-gate render-scale4-signoff test-scale5-gate test-scale5-signoff-gate render-scale5-signoff test-scale6-gate test-scale6-signoff-gate render-scale6-signoff test-scale7-gate test-scale7-signoff-gate test-scale7-stream-signoff render-scale7-signoff test-ui-api-gate test-ui-stream-gate test-gateway-cleanup-gate test-ui-ops-gate test-stack-health-gate test-launchd-gate test-launchd-live-gate test-migration-ops-gate test-device-ops-signoff-gate render-device-ops-signoff ops-check test-ui-security-gate test-security-signoff-gate render-security-signoff security test-repos-schema-gate test-ci-static-gate test-ci-signoff-gate render-ci-signoff ci build-convert build-sidecars test-sidecars-gate test-sidecars-signoff-gate render-sidecars-signoff sidecars test-repos-pins-gate test-migration-signoff-gate render-migration-signoff pin-repos test-observer-ops-gate test-grafana-layout-gate test-observability-gate test-prometheus-metrics-gate test-prometheus-up-gate observability-up observability-down test-zmq-bridge-gate test-observability-signoff-gate render-observability-signoff test-release-signoff-gate render-release-signoff tag-release test-release-tag-gate release device-ops security ci sidecars
 test: test-standalone-layout test-scale0-gate test-cutover-gate
 test-standalone-layout:
 	./test/scripts/assert-layout.sh $(ROLE)
@@ -39,6 +39,10 @@ build-configure:
 build-observer:
 	cd "$(or $(COFISWARM_REPOS_ROOT),$(HOME)/cofiswarm/repos)/cofiswarm-observer" && \
 	  CGO_ENABLED=0 $(GO) build -o bin/cofiswarm-observer ./cmd/cofiswarm-observer
+build-convert:
+	cd "$(or $(COFISWARM_REPOS_ROOT),$(HOME)/cofiswarm/repos)/cofiswarm-convert" && \
+	  CGO_ENABLED=0 $(GO) build -o bin/cofiswarm-convert ./cmd/cofiswarm-convert
+build-sidecars: build-convert
 test-scale0-gate:
 	./test/scripts/test-scale0-gate.sh
 
@@ -194,3 +198,10 @@ test-ci-signoff-gate:
 render-ci-signoff:
 	CI_SKIP_GATE=1 ./test/scripts/render-ci-signoff.sh
 ci: test-ci-signoff-gate render-ci-signoff
+test-sidecars-gate:
+	./test/scripts/test-sidecars-gate.sh
+test-sidecars-signoff-gate:
+	./test/scripts/test-sidecars-signoff-gate.sh
+render-sidecars-signoff:
+	SIDECARS_SKIP_GATE=1 ./test/scripts/render-sidecars-signoff.sh
+sidecars: test-sidecars-signoff-gate render-sidecars-signoff
