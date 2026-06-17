@@ -37,12 +37,13 @@ tracks = [
     ("Remote push", "REMOTE-PUSH-SIGNOFF.md", doc.get("remote_push_signoff")),
     ("Migration complete", "MIGRATION-COMPLETE-SIGNOFF.md", doc.get("migration_complete_signoff")),
     ("Remote complete", "REMOTE-COMPLETE-SIGNOFF.md", doc.get("remote_complete_signoff")),
+    ("Migration handoff", "MIGRATION-HANDOFF.md", doc.get("migration_handoff_signoff")),
 ]
 rows = "\n".join(
     f"| {name} | [{md}](./{md}) | {ver or '—'} |"
     for name, md, ver in tracks
 )
-md = f"""# Post-migration sign-off (Sprints 32–58)
+md = f"""# Post-migration sign-off (Sprints 32–59)
 
 **Date:** {ts}  
 **Release:** {rel}  

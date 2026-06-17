@@ -120,6 +120,19 @@ REMOTE_REQUIRE=1 make remote-complete
 
 Renders `~/cofiswarmdev/docs/REMOTE-COMPLETE-SIGNOFF.md`. Unlike `remote-push`, this gate always requires `REMOTE_REQUIRE=1` (no soft-pass).
 
+## Migration handoff (Sprint 59)
+
+Operator handoff — consolidated verification + final runbook closure:
+
+```bash
+./scripts/verify-migration.sh              # status summary (non-fatal)
+./scripts/pin-repos.sh
+make migration-handoff
+REMOTE_REQUIRE=1 make migration-handoff    # after origin push
+```
+
+Renders `~/cofiswarmdev/docs/MIGRATION-HANDOFF.md`. Requires remote-complete + strict pin/schema/signoff checks.
+
 ## Repo layout (Sprint 47)
 
 ```bash

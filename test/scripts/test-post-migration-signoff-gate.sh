@@ -22,7 +22,8 @@ for f in \
   PHASE7-SIGNOFF.md \
   RELEASE-CUT-SIGNOFF.md \
   REMOTE-PUSH-SIGNOFF.md \
-  REMOTE-COMPLETE-SIGNOFF.md; do
+  REMOTE-COMPLETE-SIGNOFF.md \
+  MIGRATION-HANDOFF.md; do
   [[ -f "${MONO}/docs/${f}" ]] || { echo "fail: missing ${MONO}/docs/${f}" >&2; exit 1; }
   echo "ok: ${f}"
 done
