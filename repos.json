@@ -8,7 +8,7 @@
       "role": "meta",
       "phase": 0,
       "required": true,
-      "pin": "342038a3d577bb83c9ae68d6f0b435d55ed36a9b"
+      "pin": "474a54753c9be58db1e5adbe29564f4a0b44db1e"
     },
     {
       "name": "cofiswarm-common",
@@ -314,7 +314,7 @@
   "cutover": "v3.0.0-bridge",
   "monorepo_tag": "v3.0.0-bridge",
   "pins": {
-    "cofiswarm-deploy": "342038a3d577bb83c9ae68d6f0b435d55ed36a9b",
+    "cofiswarm-deploy": "474a54753c9be58db1e5adbe29564f4a0b44db1e",
     "cofiswarm-common": "a55cc04ebac8e404b0e1cf89ed4dede54efe0ab1",
     "cofiswarm-docs": "90ed339550f6dddd48b426735f024846baad4e0f",
     "cofiswarm-gateway": "1fab0c55d28a26b306af7bdcffdb01bbed4a1385",
