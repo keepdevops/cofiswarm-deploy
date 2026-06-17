@@ -116,6 +116,7 @@ make repo-ci
 make go-ci                    # mode-* GOPRIVATE + published mode-sdk v0.1.0
 ./scripts/tag-mode-sdk.sh
 make mode-sdk-release
+make phase6                   # optional infer/adapter/tools scaffolds
 ```
 
 ## Paste traps

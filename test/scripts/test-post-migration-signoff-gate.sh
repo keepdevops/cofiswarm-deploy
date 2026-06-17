@@ -17,7 +17,8 @@ for f in \
   GO-MODULES-SIGNOFF.md \
   REPO-CI-SIGNOFF.md \
   GO-CI-SIGNOFF.md \
-  MODE-SDK-RELEASE-SIGNOFF.md; do
+  MODE-SDK-RELEASE-SIGNOFF.md \
+  PHASE6-SIGNOFF.md; do
   [[ -f "${MONO}/docs/${f}" ]] || { echo "fail: missing ${MONO}/docs/${f}" >&2; exit 1; }
   echo "ok: ${f}"
 done
