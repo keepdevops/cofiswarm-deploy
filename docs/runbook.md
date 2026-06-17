@@ -53,15 +53,12 @@ Refresh pins after commits: `./scripts/pin-repos.sh`
 
 ```bash
 ./scripts/pin-repos.sh
-make test-release-signoff-gate
-make render-release-signoff    # skips re-running gate
-make tag-release               # local annotated tags
-make test-release-tag-gate
+./scripts/tag-all-repos.sh       # v1.1.0 @ pin SHA on all 43 repos
+make release-cut
+RELEASE_REQUIRE_REMOTE=1 make test-all-release-tags-gate   # after push --tags
 ```
 
-Or: `make release` (all four steps)
-
-Push tags: `git -C ~/cofiswarm/repos/cofiswarm-deploy push origin v1.1.0`
+Or: `make release` (signoff + tag-all + gate). Legacy: `make tag-release` → `tag-all-repos.sh`.
 
 ## UI security (Sprint 43)
 

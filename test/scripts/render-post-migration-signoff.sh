@@ -33,12 +33,13 @@ tracks = [
     ("mode-sdk release", "MODE-SDK-RELEASE-SIGNOFF.md", doc.get("mode_sdk_release_signoff")),
     ("Phase 6 optional", "PHASE6-SIGNOFF.md", doc.get("phase6_signoff")),
     ("Phase 7 optional", "PHASE7-SIGNOFF.md", doc.get("phase7_signoff")),
+    ("Release cut", "RELEASE-CUT-SIGNOFF.md", doc.get("release_cut_signoff")),
 ]
 rows = "\n".join(
     f"| {name} | [{md}](./{md}) | {ver or '—'} |"
     for name, md, ver in tracks
 )
-md = f"""# Post-migration sign-off (Sprints 32–54)
+md = f"""# Post-migration sign-off (Sprints 32–55)
 
 **Date:** {ts}  
 **Release:** {rel}  
