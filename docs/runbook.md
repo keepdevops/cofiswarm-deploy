@@ -113,6 +113,7 @@ make go-modules
 ```bash
 ./scripts/install-repo-ci.sh
 make repo-ci
+make go-ci                    # mode-* CI checks out mode-sdk + go.work
 ```
 
 ## Paste traps

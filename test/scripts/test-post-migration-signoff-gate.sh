@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Sprint 46: post-migration track sign-off (Sprints 32–45 artifacts + pins).
+# Sprint 46+: post-migration track sign-off (Sprints 32–49 artifacts + pins).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 MONO="${MONOREPO:-$HOME/cofiswarmdev}"
@@ -12,7 +12,11 @@ for f in \
   DEVICE-OPS-SIGNOFF.md \
   SECURITY-SIGNOFF.md \
   CI-SIGNOFF.md \
-  SIDECARS-SIGNOFF.md; do
+  SIDECARS-SIGNOFF.md \
+  REPO-LAYOUT-SIGNOFF.md \
+  GO-MODULES-SIGNOFF.md \
+  REPO-CI-SIGNOFF.md \
+  GO-CI-SIGNOFF.md; do
   [[ -f "${MONO}/docs/${f}" ]] || { echo "fail: missing ${MONO}/docs/${f}" >&2; exit 1; }
   echo "ok: ${f}"
 done
