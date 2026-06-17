@@ -34,12 +34,13 @@ tracks = [
     ("Phase 6 optional", "PHASE6-SIGNOFF.md", doc.get("phase6_signoff")),
     ("Phase 7 optional", "PHASE7-SIGNOFF.md", doc.get("phase7_signoff")),
     ("Release cut", "RELEASE-CUT-SIGNOFF.md", doc.get("release_cut_signoff")),
+    ("Remote push", "REMOTE-PUSH-SIGNOFF.md", doc.get("remote_push_signoff")),
 ]
 rows = "\n".join(
     f"| {name} | [{md}](./{md}) | {ver or '—'} |"
     for name, md, ver in tracks
 )
-md = f"""# Post-migration sign-off (Sprints 32–55)
+md = f"""# Post-migration sign-off (Sprints 32–56)
 
 **Date:** {ts}  
 **Release:** {rel}  

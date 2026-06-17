@@ -43,6 +43,7 @@ doc["mode_sdk_release_signoff"] = "v1.1.0"
 doc["phase6_signoff"] = "v1.1.0"
 doc["phase7_signoff"] = "v1.1.0"
 doc["release_cut_signoff"] = "v1.1.0"
+doc["remote_push_signoff"] = "v1.1.0"
 repos_file.write_text(json.dumps(doc, indent=2) + "\n")
 print(f"pinned {sum(1 for v in pins.values() if v)} repos → {doc['release']} (post-migration signoffs v1.1.0)")
 PY

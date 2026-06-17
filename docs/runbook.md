@@ -55,10 +55,12 @@ Refresh pins after commits: `./scripts/pin-repos.sh`
 ./scripts/pin-repos.sh
 ./scripts/tag-all-repos.sh       # v1.1.0 @ pin SHA on all 43 repos
 make release-cut
-RELEASE_REQUIRE_REMOTE=1 make test-all-release-tags-gate   # after push --tags
+PUSH_DRY_RUN=1 ./scripts/push-all-repos.sh
+./scripts/push-all-repos.sh
+REMOTE_REQUIRE=1 make remote-push
 ```
 
-Or: `make release` (signoff + tag-all + gate). Legacy: `make tag-release` → `tag-all-repos.sh`.
+Or: `make release` (signoff + tag-all + gate).
 
 ## UI security (Sprint 43)
 
