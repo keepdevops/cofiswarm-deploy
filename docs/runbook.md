@@ -61,6 +61,15 @@ Or: `make release` (all four steps)
 
 Push tags: `git -C ~/cofiswarm/repos/cofiswarm-deploy push origin v1.1.0`
 
+## UI security (Sprint 43)
+
+```bash
+make test-ui-security-gate
+make security    # gate + SECURITY-SIGNOFF.md
+```
+
+After `package.json` changes: `cd ~/cofiswarm/repos/cofiswarm-ui && npm install && npm test`
+
 ## Paste traps
 
 - Do **not** paste inline `# comments` on the same line as `make` targets.
