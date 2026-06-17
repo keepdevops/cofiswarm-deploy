@@ -31,7 +31,7 @@ make ci                    # static
 COFISWARM_CI_LIVE=1 make test-ci-signoff-gate   # + device pins + stack health
 ```
 
-Workflow: `.github/workflows/ci.yml`
+Workflow: `.github/workflows/ci.yml` (Node 24 · `actions/setup-node@v6`)
 """
 Path(sys.argv[1]).write_text(md)
 print(f"rendered {sys.argv[1]}")

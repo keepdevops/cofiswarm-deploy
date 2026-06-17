@@ -78,7 +78,7 @@ make ci                           # static + CI-SIGNOFF.md
 COFISWARM_CI_LIVE=1 make test-ci-signoff-gate   # + pins + stack health on device
 ```
 
-Workflow: `.github/workflows/ci.yml` (runs on push/PR to `main`).
+Workflow: `.github/workflows/ci.yml` (Node **24**, `actions/setup-node@v6`, runs on push/PR to `main`).
 
 ## Paste traps
 
