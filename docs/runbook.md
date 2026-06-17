@@ -85,8 +85,10 @@ Workflow: `.github/workflows/ci.yml` (Node **24**, `actions/setup-node@v6`, runs
 ```bash
 ./scripts/pin-repos.sh
 make post-migration
-POST_MIGRATION_LIVE=1 make post-migration-live   # + sidecars + device ops (stack up)
+make post-migration-live   # pin-repos + sidecars + device ops (stack up)
 ```
+
+After local commits to any pinned repo, run `./scripts/pin-repos.sh` before `make post-migration`.
 
 ## Paste traps
 

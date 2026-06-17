@@ -210,5 +210,5 @@ test-post-migration-signoff-gate:
 render-post-migration-signoff:
 	POST_MIGRATION_SKIP_GATE=1 ./test/scripts/render-post-migration-signoff.sh
 post-migration: test-post-migration-signoff-gate render-post-migration-signoff
-post-migration-live:
+post-migration-live: pin-repos
 	POST_MIGRATION_LIVE=1 $(MAKE) post-migration
