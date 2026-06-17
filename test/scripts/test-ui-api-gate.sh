@@ -21,20 +21,9 @@ check /api/mlx/pressure
 check /api/configure/status
 check /rag/health
 
-out="$(mktemp)"
-trap 'rm -f "$out"' EXIT
+ui_sse_breathe
+
 payload='{"prompt":"UI gateway stream smoke","mode":"flat","mode_config":{"agents":["architect"],"max_tokens":24}}'
-for attempt in 1 2; do
-  ui_sse_post "${UI}/api/architect/stream" "$out" 90 "$payload" || true
-  if ui_sse_ok "$out"; then
-    echo "ok: /api/architect/stream (via UI :3000)"
-    echo "ok: ui api gateway"
-    exit 0
-  fi
-  [[ "$attempt" -eq 2 ]] && break
-  echo "warn: stream smoke retry (${attempt}/2)" >&2
-  sleep 2
-done
-echo "fail: /api/architect/stream via UI gateway" >&2
-head -20 "$out" >&2
-exit 1
+ui_sse_smoke "${UI}/api/architect/stream" "$payload" "/api/architect/stream (via UI :3000)"
+echo "ok: /api/architect/stream (via UI :3000)"
+echo "ok: ui api gateway"

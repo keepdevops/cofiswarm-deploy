@@ -112,6 +112,35 @@ ui_sse_diagnose() {
   echo "missing ${missing:-SSE events}"
 }
 
+# POST SSE smoke (token or done) with retries — for test-ui-api-gate.sh.
+ui_sse_smoke() {
+  local url="$1" payload="$2" label="${3:-stream smoke}"
+  local max="${UI_SSE_RETRIES:-5}" attempt out reason
+  ui_sse_wait_stack || true
+  for attempt in $(seq 1 "$max"); do
+    out="$(mktemp)"
+    ui_sse_post "$url" "$out" "${UI_SSE_SMOKE_TIMEOUT:-90}" "$payload" || true
+    if ui_sse_ok "$out"; then
+      rm -f "$out"
+      return 0
+    fi
+    reason="$(ui_sse_diagnose "$out" 'event: token|event:done')"
+    if [[ "$attempt" -lt "$max" ]]; then
+      echo "warn: ${label} — ${reason}, retry (${attempt}/${max})" >&2
+      if ui_sse_gateway_error "$out"; then
+        ui_sse_wait_stack || true
+      else
+        sleep "${UI_SSE_RETRY_SLEEP:-3}"
+      fi
+    else
+      echo "fail: ${label} — ${reason}" >&2
+      head -20 "$out" >&2
+    fi
+    rm -f "$out"
+  done
+  return 1
+}
+
 # POST SSE and assert event patterns; retries on curl 18 truncation or nginx 502.
 ui_sse_expect() {
   local url="$1" timeout="$2" expect="$3" payload="$4" label="${5:-stream}"

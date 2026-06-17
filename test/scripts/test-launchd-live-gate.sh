@@ -24,7 +24,7 @@ if launchctl print "${DOMAIN}/${LABEL}" >/dev/null 2>&1; then
 elif launchctl list 2>/dev/null | grep -q "${LABEL}"; then
   echo "ok: launchd listed ${LABEL}"
 elif [[ "${LAUNCHD_REQUIRE:-}" == "1" ]]; then
-  echo "fail: ${LABEL} plist present but not loaded (make install-launchd)" >&2
+  echo "fail: ${LABEL} plist present but not loaded — run: make install-launchd" >&2
   exit 1
 else
   echo "ok: launchd live skip (plist present, not loaded)"

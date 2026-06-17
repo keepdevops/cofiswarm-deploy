@@ -21,11 +21,13 @@ Or via monorepo: `matrix up` / `matrix down`
 ## Login auto-start (optional)
 
 ```bash
-make install-launchd
-make launchd-status
+make install-launchd    # writes plist + launchctl bootstrap (required after reboot if booted out)
+make launchd-status     # plist: … / state: loaded|not loaded
 LAUNCHD_REQUIRE=1 make test-launchd-live-gate
 make uninstall-launchd
 ```
+
+A plist on disk does **not** mean loaded — re-run `make install-launchd` if `state: not loaded`.
 
 Logs: `~/cofiswarm/fhs/var/log/cofiswarm/launchd-stack-up.{log,err}`
 
