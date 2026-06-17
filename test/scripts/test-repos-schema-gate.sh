@@ -30,6 +30,7 @@ for key in (
     "release_cut_signoff",
     "remote_push_signoff",
     "migration_complete_signoff",
+    "remote_complete_signoff",
     "version",
 ):
     if not doc.get(key):

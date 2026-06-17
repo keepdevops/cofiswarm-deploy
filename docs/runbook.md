@@ -106,6 +106,20 @@ REMOTE_REQUIRE=1 make migration-complete   # after ./scripts/push-all-repos.sh
 
 Renders `~/cofiswarmdev/docs/MIGRATION-COMPLETE-SIGNOFF.md`. The 43-repo device migration is complete when this gate passes with `REMOTE_REQUIRE=1`.
 
+## Remote complete (Sprint 58)
+
+Push runbook closure — hard origin verification after push:
+
+```bash
+./scripts/verify-remote-push.sh              # status summary (non-fatal)
+PUSH_DRY_RUN=1 ./scripts/push-all-repos.sh   # preview
+./scripts/push-all-repos.sh
+PUSH_TAG_FORCE=1 ./scripts/push-all-repos.sh   # if origin tag at old SHA
+REMOTE_REQUIRE=1 make remote-complete
+```
+
+Renders `~/cofiswarmdev/docs/REMOTE-COMPLETE-SIGNOFF.md`. Unlike `remote-push`, this gate always requires `REMOTE_REQUIRE=1` (no soft-pass).
+
 ## Repo layout (Sprint 47)
 
 ```bash
