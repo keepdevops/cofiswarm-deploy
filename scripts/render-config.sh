@@ -20,6 +20,11 @@ install -d "${FHS}/etc/cofiswarm/config/agents" \
          "${FHS}/var/log/cofiswarm/agent_logs" \
          "${FHS}/run/cofiswarm"
 
+OBS_PLUGINS="${REPOS}/cofiswarm-observer/plugins"
+if [[ -d "$OBS_PLUGINS" ]]; then
+  cp -f "${OBS_PLUGINS}"/*.yaml "${FHS}/var/lib/cofiswarm/observer/plugins/" 2>/dev/null || true
+fi
+
 if [[ -d "${CFG_REPO}/config/agents" ]]; then
   cp -R "${CFG_REPO}/config/agents/." "${FHS}/etc/cofiswarm/config/agents/"
 elif [[ -d "${CFG_REPO}/agents" ]]; then
