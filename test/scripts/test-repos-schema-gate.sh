@@ -20,6 +20,7 @@ for key in (
     "security_signoff",
     "ci_signoff",
     "sidecars_signoff",
+    "repo_layout_signoff",
     "version",
 ):
     if not doc.get(key):

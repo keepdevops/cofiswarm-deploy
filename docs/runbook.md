@@ -90,6 +90,14 @@ make post-migration-live   # pin-repos + sidecars + device ops (stack up)
 
 After local commits to any pinned repo, run `./scripts/pin-repos.sh` before `make post-migration`.
 
+## Repo layout (Sprint 47)
+
+```bash
+make test-repo-layout-gate      # 43 repos: README, Makefile, test/standalone, no submodules
+make repo-layout
+./scripts/install-repo-ci.sh    # optional: copy per-repo ci template
+```
+
 ## Paste traps
 
 - Do **not** paste inline `# comments` on the same line as `make` targets.

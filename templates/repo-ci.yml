@@ -1,0 +1,25 @@
+# Per-repo CI template — copy to cofiswarm-<role>/.github/workflows/ci.yml
+# Install: ./scripts/install-repo-ci.sh [repo-name ...]
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  layout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        if: hashFiles('package.json') != ''
+        with:
+          node-version: 24
+          cache: npm
+      - name: Standalone layout + tests
+        run: make test
