@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # Sprint 33: architect SSE streams via UI nginx :3000 (all four modes + mlx compat).
 set -euo pipefail
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck source=test/scripts/lib-ui-sse.sh
+source "${ROOT}/lib-ui-sse.sh"
 UI="${UI_URL:-http://127.0.0.1:3000}"
 
 curl -sf "${UI}/api/health" >/dev/null || {
@@ -13,9 +16,7 @@ stream_case() {
   local out
   out="$(mktemp)"
   trap 'rm -f "$out"' RETURN
-  curl -sS -N --max-time "$timeout" -X POST "${UI}/api/architect/stream" \
-    -H 'Content-Type: application/json' \
-    -d "$payload" >"$out" || true
+  ui_sse_post "${UI}/api/architect/stream" "$out" "$timeout" "$payload" || true
   local pat
   for pat in $expect; do
     if [[ "$pat" == 'event:done' ]]; then
@@ -49,15 +50,13 @@ stream_case cascade 300 'event: synthesis_start event: token event:done' \
 
 out="$(mktemp)"
 trap 'rm -f "$out"' EXIT
-curl -sS -N --max-time 120 -X POST "${UI}/api/mlx/stream" \
-  -H 'Content-Type: application/json' \
-  -d '{"prompt":"UI mlx stream smoke","mode":"flat","mode_config":{"agents":["architect"],"max_tokens":16}}' \
-  >"$out" || true
-grep -q 'event: token' "$out" || grep -q '\[DONE\]' "$out" || {
+ui_sse_post "${UI}/api/mlx/stream" "$out" 120 \
+  '{"prompt":"UI mlx stream smoke","mode":"flat","mode_config":{"agents":["architect"],"max_tokens":16}}' || true
+if ! ui_sse_ok "$out"; then
   echo "fail: /api/mlx/stream via UI" >&2
   head -10 "$out" >&2
   exit 1
-}
+fi
 echo "ok: mlx/stream (via UI :3000)"
 
 echo "ok: ui stream gateway — flat, pipeline, router, cascade, mlx"
