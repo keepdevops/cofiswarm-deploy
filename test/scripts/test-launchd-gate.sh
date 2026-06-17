@@ -4,10 +4,13 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 TEMPLATE="${ROOT}/deploy/launchd/com.cofiswarm.stack-up.plist.template"
 INSTALL="${ROOT}/scripts/install-launchd.sh"
+UNINSTALL="${ROOT}/scripts/uninstall-launchd.sh"
 RENDERED="$(mktemp)"
 trap 'rm -f "$RENDERED"' EXIT
 
 [[ -x "$INSTALL" ]] || { echo "fail: missing $INSTALL" >&2; exit 1; }
+[[ -x "$UNINSTALL" ]] || { echo "fail: missing $UNINSTALL" >&2; exit 1; }
+grep -q bootout "$UNINSTALL" || { echo "fail: uninstall must bootout agent" >&2; exit 1; }
 [[ -f "$TEMPLATE" ]] || { echo "fail: missing $TEMPLATE" >&2; exit 1; }
 
 grep -q 'stack-up.sh\|make up' "$TEMPLATE" || {

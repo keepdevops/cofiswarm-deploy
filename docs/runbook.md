@@ -18,11 +18,22 @@ make down
 
 Or via monorepo: `matrix up` / `matrix down`
 
+## Login auto-start (optional)
+
+```bash
+make install-launchd
+make launchd-status
+LAUNCHD_REQUIRE=1 make test-launchd-live-gate
+make uninstall-launchd
+```
+
+Logs: `~/cofiswarm/fhs/var/log/cofiswarm/launchd-stack-up.{log,err}`
+
 ## Health checks
 
 ```bash
-make test-stack-health-gate
-make test-ui-ops-gate
+make ops-check                         # stack health + UI smoke
+make test-device-ops-signoff-gate      # full device ops incl. launchd template
 make test-observability-signoff-gate   # includes optional Prometheus/Grafana
 ```
 
