@@ -94,6 +94,18 @@ make post-migration-live   # pin-repos + sidecars + device ops (stack up)
 
 After local commits to any pinned repo, run `./scripts/pin-repos.sh` before `make post-migration`.
 
+## Migration complete (Sprint 57)
+
+Final capstone after release cut + remote push:
+
+```bash
+./scripts/pin-repos.sh
+make migration-complete
+REMOTE_REQUIRE=1 make migration-complete   # after ./scripts/push-all-repos.sh
+```
+
+Renders `~/cofiswarmdev/docs/MIGRATION-COMPLETE-SIGNOFF.md`. The 43-repo device migration is complete when this gate passes with `REMOTE_REQUIRE=1`.
+
 ## Repo layout (Sprint 47)
 
 ```bash
