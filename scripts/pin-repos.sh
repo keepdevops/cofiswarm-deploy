@@ -27,10 +27,10 @@ for r in doc["repos"]:
         r["status"] = "archived"
         r["required"] = False
 doc["pins"] = pins
-doc["release"] = doc.get("release", "v1.0.0")
-if doc["release"] == "v1.0.0":
-    doc["release"] = "v1.1.0"
+doc["version"] = "1.1.0"
+doc["release"] = "v1.1.0"
 doc["migration_signoff"] = "v1.1.0"
+doc["observability_signoff"] = "v1.1.0"
 repos_file.write_text(json.dumps(doc, indent=2) + "\n")
-print(f"pinned {sum(1 for v in pins.values() if v)} repos → release {doc['release']}")
+print(f"pinned {sum(1 for v in pins.values() if v)} repos → {doc['release']} (migration + observability signoff)")
 PY

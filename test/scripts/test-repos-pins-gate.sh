@@ -36,5 +36,9 @@ ver = doc.get("migration_signoff")
 if not ver:
     print("fail: missing migration_signoff in repos.json", file=sys.stderr)
     sys.exit(1)
-print(f"ok: repos pins ({len(pins)} entries, migration_signoff={ver})")
+obs = doc.get("observability_signoff")
+if not obs:
+    print("fail: missing observability_signoff in repos.json", file=sys.stderr)
+    sys.exit(1)
+print(f"ok: repos pins ({len(pins)} entries, migration={ver}, observability={obs})")
 PY

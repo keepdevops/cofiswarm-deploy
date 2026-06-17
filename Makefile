@@ -1,5 +1,5 @@
 ROLE := deploy
-.PHONY: test render-config compose-config up down ui-build stack-up stack-down test-scale0-gate test-mode-relay-gate test-configure-gate test-configure-live build-dispatch build-modes build-configure build-observer test-scale0-signoff-gate render-scale0-signoff test-scale1-gate test-scale2-gate test-scale2-signoff-gate render-scale2-signoff test-architect-stream-gate test-architect-stream-pipeline-gate install-launchd test-scale4-gate test-scale4-signoff-gate render-scale4-signoff test-scale5-gate test-scale5-signoff-gate render-scale5-signoff test-scale6-gate test-scale6-signoff-gate render-scale6-signoff test-scale7-gate test-scale7-signoff-gate test-scale7-stream-signoff render-scale7-signoff test-ui-api-gate test-ui-stream-gate test-gateway-cleanup-gate test-ui-ops-gate test-stack-health-gate test-launchd-gate test-migration-ops-gate test-repos-pins-gate test-migration-signoff-gate render-migration-signoff pin-repos test-observer-ops-gate test-grafana-layout-gate test-observability-gate test-prometheus-metrics-gate test-prometheus-up-gate observability-up observability-down test-zmq-bridge-gate test-observability-signoff-gate render-observability-signoff
+.PHONY: test render-config compose-config up down ui-build stack-up stack-down test-scale0-gate test-mode-relay-gate test-configure-gate test-configure-live build-dispatch build-modes build-configure build-observer test-scale0-signoff-gate render-scale0-signoff test-scale1-gate test-scale2-gate test-scale2-signoff-gate render-scale2-signoff test-architect-stream-gate test-architect-stream-pipeline-gate install-launchd test-scale4-gate test-scale4-signoff-gate render-scale4-signoff test-scale5-gate test-scale5-signoff-gate render-scale5-signoff test-scale6-gate test-scale6-signoff-gate render-scale6-signoff test-scale7-gate test-scale7-signoff-gate test-scale7-stream-signoff render-scale7-signoff test-ui-api-gate test-ui-stream-gate test-gateway-cleanup-gate test-ui-ops-gate test-stack-health-gate test-launchd-gate test-migration-ops-gate test-repos-pins-gate test-migration-signoff-gate render-migration-signoff pin-repos test-observer-ops-gate test-grafana-layout-gate test-observability-gate test-prometheus-metrics-gate test-prometheus-up-gate observability-up observability-down test-zmq-bridge-gate test-observability-signoff-gate render-observability-signoff test-release-signoff-gate render-release-signoff
 test: test-standalone-layout test-scale0-gate test-cutover-gate
 test-standalone-layout:
 	./test/scripts/assert-layout.sh $(ROLE)
@@ -157,3 +157,7 @@ test-observability-signoff-gate:
 	./test/scripts/test-observability-signoff-gate.sh
 render-observability-signoff:
 	./test/scripts/render-observability-signoff.sh
+test-release-signoff-gate:
+	./test/scripts/test-release-signoff-gate.sh
+render-release-signoff:
+	./test/scripts/render-release-signoff.sh
