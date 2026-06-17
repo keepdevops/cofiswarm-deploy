@@ -9,6 +9,10 @@ TEMPLATE="${ROOT}/templates/repo-ci.yml"
 
 install_one() {
   local name="$1"
+  if [[ "$name" == "cofiswarm-deploy" ]]; then
+    echo "skip: cofiswarm-deploy (custom static-gates ci.yml)"
+    return 0
+  fi
   local dest="${REPOS}/${name}/.github/workflows/ci.yml"
   [[ -d "${REPOS}/${name}" ]] || { echo "skip: ${name} (no checkout)"; return 0; }
   if [[ -f "$dest" && "${INSTALL_REPO_CI_FORCE:-}" != "1" ]]; then

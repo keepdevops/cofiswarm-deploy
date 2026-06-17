@@ -1,5 +1,4 @@
-# Per-repo CI — layout + tests (Node 24 / Go 1.22 when present).
-# Install: ./scripts/install-repo-ci.sh [repo-name ...]
+# Sprint 44+: static CI gates — GitHub Actions Node 24 / setup-node@v6.
 name: ci
 
 on:
@@ -11,50 +10,51 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  test:
+  static-gates:
     runs-on: ubuntu-latest
+    env:
+      COFISWARM_REPOS_ROOT: ${{ github.workspace }}/cofiswarm/repos
     steps:
       - uses: actions/checkout@v6
+        with:
+          path: cofiswarm/repos/cofiswarm-deploy
 
       - uses: actions/checkout@v6
-        if: hashFiles('go.mod') != ''
         with:
-          repository: keepdevops/cofiswarm-mode-sdk
-          path: cofiswarm-mode-sdk
+          repository: keepdevops/cofiswarm-common
+          path: cofiswarm/repos/cofiswarm-common
 
-      - uses: actions/setup-go@v5
-        if: hashFiles('go.mod') != ''
+      - uses: actions/checkout@v6
         with:
-          go-version: '1.22'
+          repository: keepdevops/cofiswarm-ui
+          path: cofiswarm/repos/cofiswarm-ui
+
+      - uses: actions/checkout@v6
+        with:
+          repository: keepdevops/cofiswarm-gateway
+          path: cofiswarm/repos/cofiswarm-gateway
+
+      - uses: actions/checkout@v6
+        with:
+          repository: keepdevops/cofiswarm-grafana
+          path: cofiswarm/repos/cofiswarm-grafana
+
+      - uses: actions/checkout@v6
+        with:
+          repository: keepdevops/cofiswarm-e2e
+          path: cofiswarm/repos/cofiswarm-e2e
 
       - uses: actions/setup-node@v6
-        if: hashFiles('package.json') != ''
         with:
           node-version: 24
           cache: npm
+          cache-dependency-path: cofiswarm/repos/cofiswarm-ui/package-lock.json
 
-      - name: Go workspace (mode-sdk)
-        if: hashFiles('go.mod') != ''
-        run: |
-          set -euo pipefail
-          if grep -q 'github.com/keepdevops/cofiswarm-mode-sdk' go.mod; then
-            cat > go.work <<'EOF'
-          go 1.22
-
-          use .
-
-          replace github.com/keepdevops/cofiswarm-mode-sdk => ./cofiswarm-mode-sdk
-          EOF
-            echo "GOWORK=${{ github.workspace }}/go.work" >> "$GITHUB_ENV"
-          fi
-
-      - name: Layout + tests
-        run: |
-          set -euo pipefail
-          if [[ -f package.json ]]; then
-            npm ci
-            npm test
-          else
-            make test
-          fi
+      - name: Static gates
+        working-directory: cofiswarm/repos/cofiswarm-deploy
+        run: make test-ci-static-gate

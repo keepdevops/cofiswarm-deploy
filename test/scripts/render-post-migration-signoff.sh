@@ -36,7 +36,7 @@ rows = "\n".join(
     f"| {name} | [{md}](./{md}) | {ver or '—'} |"
     for name, md, ver in tracks
 )
-md = f"""# Post-migration sign-off (Sprints 32–50)
+md = f"""# Post-migration sign-off (Sprints 32–51)
 
 **Date:** {ts}  
 **Release:** {rel}  

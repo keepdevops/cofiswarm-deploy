@@ -12,16 +12,15 @@ python3 - "$OUT" <<'PY'
 import datetime, sys
 from pathlib import Path
 
-out = Path(sys.argv[1])
 ts = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
-out.write_text(f"""# Go CI workspace sign-off
+Path(sys.argv[1]).write_text(f"""# Go CI workspace sign-off
 
 **Date:** {ts}  
-**Scope:** mode-* repos · checkout mode-sdk · ephemeral go.work in GitHub Actions
+**Scope:** mode-* repos · `GOPRIVATE` + `mode-sdk@v0.1.0` from GitHub · no sibling `go.work`
 
 ## Verdict
 
-**Per-repo CI can build mode plugins:** PASS
+**Per-repo CI builds mode plugins from published module:** PASS
 
 ## Gates
 
@@ -29,7 +28,8 @@ out.write_text(f"""# Go CI workspace sign-off
 cd ~/cofiswarm/repos/cofiswarm-deploy
 INSTALL_REPO_CI_FORCE=1 ./scripts/install-repo-ci.sh
 make go-ci
+MODE_SDK_REQUIRE_REMOTE=1 make test-mode-sdk-release-gate
 ```
 """)
-print(f"rendered {out}")
+print(f"rendered {sys.argv[1]}")
 PY

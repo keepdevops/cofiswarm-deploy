@@ -113,7 +113,7 @@ make go-modules
 ```bash
 ./scripts/install-repo-ci.sh
 make repo-ci
-make go-ci                    # mode-* CI checks out mode-sdk + go.work
+make go-ci                    # mode-* GOPRIVATE + published mode-sdk v0.1.0
 ./scripts/tag-mode-sdk.sh
 make mode-sdk-release
 ```
