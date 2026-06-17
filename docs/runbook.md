@@ -98,6 +98,16 @@ make repo-layout
 ./scripts/install-repo-ci.sh    # optional: copy per-repo ci template
 ```
 
+## Go workspace (Sprint 48)
+
+```bash
+./scripts/render-go-workspace.sh
+CGO_ENABLED=0 make build-modes
+make go-modules
+```
+
+`~/cofiswarm/repos/go.work` links sibling Go modules; `mode-sdk` is a workspace `replace` (not `../` in each `go.mod`).
+
 ## Paste traps
 
 - Do **not** paste inline `# comments` on the same line as `make` targets.

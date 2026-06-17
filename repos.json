@@ -8,7 +8,7 @@
       "role": "meta",
       "phase": 0,
       "required": true,
-      "pin": "d57fb015151228185c8a3a7686abfd764e2ffeeb"
+      "pin": "f1346eabb2ab854f1666847174d3b1d73bf54118"
     },
     {
       "name": "cofiswarm-common",
@@ -314,7 +314,7 @@
   "cutover": "v3.0.0-bridge",
   "monorepo_tag": "v3.0.0-bridge",
   "pins": {
-    "cofiswarm-deploy": "d57fb015151228185c8a3a7686abfd764e2ffeeb",
+    "cofiswarm-deploy": "f1346eabb2ab854f1666847174d3b1d73bf54118",
     "cofiswarm-common": "76f93540cc86f856ea40ec5e319a5113f93c0f65",
     "cofiswarm-docs": "7db0565571d21abce60bb6cf8a93af2cb7f2d2a7",
     "cofiswarm-gateway": "dd0ff26f756cd9b8ee6f03accf2985cdbed07636",
@@ -364,5 +364,6 @@
   "security_signoff": "v1.1.0",
   "ci_signoff": "v1.1.0",
   "sidecars_signoff": "v1.1.0",
-  "repo_layout_signoff": "v1.1.0"
+  "repo_layout_signoff": "v1.1.0",
+  "go_modules_signoff": "v1.1.0"
 }

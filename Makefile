@@ -29,6 +29,8 @@ build-dispatch:
 	  CGO_ENABLED=0 $(GO) build -o bin/cofiswarm-dispatch ./cmd/cofiswarm-dispatch
 build-modes:
 	@set -e; repos="$(or $(COFISWARM_REPOS_ROOT),$(HOME)/cofiswarm/repos)"; \
+	export GOWORK="$$repos/go.work"; \
+	[[ -f "$$GOWORK" ]] || ./scripts/render-go-workspace.sh; \
 	for m in mode-flat mode-pipeline mode-cascade mode-router; do \
 	  echo "==> $$m"; \
 	  (cd "$$repos/cofiswarm-$$m" && CGO_ENABLED=0 $(GO) build -o bin/cofiswarm-$$m ./cmd/cofiswarm-$$m); \
@@ -221,3 +223,12 @@ test-repo-layout-signoff-gate:
 render-repo-layout-signoff:
 	REPO_LAYOUT_SKIP_GATE=1 ./test/scripts/render-repo-layout-signoff.sh
 repo-layout: test-repo-layout-signoff-gate render-repo-layout-signoff
+render-go-workspace:
+	./scripts/render-go-workspace.sh
+test-go-workspace-gate:
+	./test/scripts/test-go-workspace-gate.sh
+test-go-modules-signoff-gate:
+	./test/scripts/test-go-modules-signoff-gate.sh
+render-go-modules-signoff:
+	GO_MODULES_SKIP_GATE=1 ./test/scripts/render-go-modules-signoff.sh
+go-modules: render-go-workspace test-go-modules-signoff-gate render-go-modules-signoff
