@@ -232,3 +232,10 @@ test-go-modules-signoff-gate:
 render-go-modules-signoff:
 	GO_MODULES_SKIP_GATE=1 ./test/scripts/render-go-modules-signoff.sh
 go-modules: render-go-workspace test-go-modules-signoff-gate render-go-modules-signoff
+test-repo-ci-gate:
+	./test/scripts/test-repo-ci-gate.sh
+test-repo-ci-signoff-gate:
+	./test/scripts/test-repo-ci-signoff-gate.sh
+render-repo-ci-signoff:
+	REPO_CI_SKIP_GATE=1 ./test/scripts/render-repo-ci-signoff.sh
+repo-ci: test-repo-ci-signoff-gate render-repo-ci-signoff

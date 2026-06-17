@@ -108,6 +108,13 @@ make go-modules
 
 `~/cofiswarm/repos/go.work` links sibling Go modules; `mode-sdk` is a workspace `replace` (not `../` in each `go.mod`).
 
+## Per-repo CI (Sprint 49)
+
+```bash
+./scripts/install-repo-ci.sh
+make repo-ci
+```
+
 ## Paste traps
 
 - Do **not** paste inline `# comments` on the same line as `make` targets.

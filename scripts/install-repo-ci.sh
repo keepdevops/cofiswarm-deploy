@@ -23,13 +23,14 @@ install_one() {
 if [[ $# -gt 0 ]]; then
   for name in "$@"; do install_one "$name"; done
 else
-  mapfile -t names < <(python3 - "$ROOT/repos.json" <<'PY'
+  while IFS= read -r name; do
+    install_one "$name"
+  done < <(python3 - "$ROOT/repos.json" <<'PY'
 import json, sys
 from pathlib import Path
 for r in json.loads(Path(sys.argv[1]).read_text()).get("repos") or []:
     print(r["name"])
 PY
 )
-  for name in "${names[@]}"; do install_one "$name"; done
 fi
 echo "ok: install-repo-ci"

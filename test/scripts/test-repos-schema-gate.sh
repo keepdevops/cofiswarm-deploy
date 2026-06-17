@@ -22,6 +22,7 @@ for key in (
     "sidecars_signoff",
     "repo_layout_signoff",
     "go_modules_signoff",
+    "repo_ci_signoff",
     "version",
 ):
     if not doc.get(key):
