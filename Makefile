@@ -1,5 +1,5 @@
 ROLE := deploy
-.PHONY: test render-config compose-config up down ui-build stack-up stack-down test-scale0-gate test-mode-relay-gate test-configure-gate test-configure-live build-dispatch build-modes build-configure build-observer test-scale0-signoff-gate render-scale0-signoff test-scale1-gate test-scale2-gate test-scale2-signoff-gate render-scale2-signoff test-architect-stream-gate test-architect-stream-pipeline-gate install-launchd uninstall-launchd launchd-status test-scale4-gate test-scale4-signoff-gate render-scale4-signoff test-scale5-gate test-scale5-signoff-gate render-scale5-signoff test-scale6-gate test-scale6-signoff-gate render-scale6-signoff test-scale7-gate test-scale7-signoff-gate test-scale7-stream-signoff render-scale7-signoff test-ui-api-gate test-ui-stream-gate test-gateway-cleanup-gate test-ui-ops-gate test-stack-health-gate test-launchd-gate test-launchd-live-gate test-migration-ops-gate test-device-ops-signoff-gate render-device-ops-signoff ops-check test-ui-security-gate test-security-signoff-gate render-security-signoff security test-repos-pins-gate test-migration-signoff-gate render-migration-signoff pin-repos test-observer-ops-gate test-grafana-layout-gate test-observability-gate test-prometheus-metrics-gate test-prometheus-up-gate observability-up observability-down test-zmq-bridge-gate test-observability-signoff-gate render-observability-signoff test-release-signoff-gate render-release-signoff tag-release test-release-tag-gate release device-ops security
+.PHONY: test render-config compose-config up down ui-build stack-up stack-down test-scale0-gate test-mode-relay-gate test-configure-gate test-configure-live build-dispatch build-modes build-configure build-observer test-scale0-signoff-gate render-scale0-signoff test-scale1-gate test-scale2-gate test-scale2-signoff-gate render-scale2-signoff test-architect-stream-gate test-architect-stream-pipeline-gate install-launchd uninstall-launchd launchd-status test-scale4-gate test-scale4-signoff-gate render-scale4-signoff test-scale5-gate test-scale5-signoff-gate render-scale5-signoff test-scale6-gate test-scale6-signoff-gate render-scale6-signoff test-scale7-gate test-scale7-signoff-gate test-scale7-stream-signoff render-scale7-signoff test-ui-api-gate test-ui-stream-gate test-gateway-cleanup-gate test-ui-ops-gate test-stack-health-gate test-launchd-gate test-launchd-live-gate test-migration-ops-gate test-device-ops-signoff-gate render-device-ops-signoff ops-check test-ui-security-gate test-security-signoff-gate render-security-signoff security test-repos-schema-gate test-ci-static-gate test-ci-signoff-gate render-ci-signoff ci test-repos-pins-gate test-migration-signoff-gate render-migration-signoff pin-repos test-observer-ops-gate test-grafana-layout-gate test-observability-gate test-prometheus-metrics-gate test-prometheus-up-gate observability-up observability-down test-zmq-bridge-gate test-observability-signoff-gate render-observability-signoff test-release-signoff-gate render-release-signoff tag-release test-release-tag-gate release device-ops security ci
 test: test-standalone-layout test-scale0-gate test-cutover-gate
 test-standalone-layout:
 	./test/scripts/assert-layout.sh $(ROLE)
@@ -185,3 +185,12 @@ test-security-signoff-gate:
 render-security-signoff:
 	SECURITY_SKIP_GATE=1 ./test/scripts/render-security-signoff.sh
 security: test-security-signoff-gate render-security-signoff
+test-repos-schema-gate:
+	./test/scripts/test-repos-schema-gate.sh
+test-ci-static-gate:
+	./test/scripts/test-ci-static-gate.sh
+test-ci-signoff-gate:
+	./test/scripts/test-ci-signoff-gate.sh
+render-ci-signoff:
+	CI_SKIP_GATE=1 ./test/scripts/render-ci-signoff.sh
+ci: test-ci-signoff-gate render-ci-signoff

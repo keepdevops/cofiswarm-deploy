@@ -1,0 +1,43 @@
+# Sprint 44: static CI gates (no device stack required).
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static-gates:
+    runs-on: ubuntu-latest
+    env:
+      COFISWARM_REPOS_ROOT: ${{ github.workspace }}/cofiswarm/repos
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: cofiswarm/repos/cofiswarm-deploy
+
+      - name: Checkout sibling repos
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          root="${{ github.workspace }}/cofiswarm/repos"
+          deploy="${root}/cofiswarm-deploy"
+          for repo in cofiswarm-common cofiswarm-ui cofiswarm-gateway cofiswarm-grafana cofiswarm-e2e; do
+            git clone --depth 1 "https://github.com/keepdevops/${repo}.git" "${root}/${repo}"
+          done
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: cofiswarm/repos/cofiswarm-ui/package-lock.json
+
+      - name: Static gates
+        working-directory: cofiswarm/repos/cofiswarm-deploy
+        run: make test-ci-static-gate

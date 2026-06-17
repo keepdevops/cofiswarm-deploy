@@ -70,6 +70,16 @@ make security    # gate + SECURITY-SIGNOFF.md
 
 After `package.json` changes: `cd ~/cofiswarm/repos/cofiswarm-ui && npm install && npm test`
 
+## CI (Sprint 44)
+
+```bash
+make test-ci-static-gate          # local / GitHub Actions
+make ci                           # static + CI-SIGNOFF.md
+COFISWARM_CI_LIVE=1 make test-ci-signoff-gate   # + pins + stack health on device
+```
+
+Workflow: `.github/workflows/ci.yml` (runs on push/PR to `main`).
+
 ## Paste traps
 
 - Do **not** paste inline `# comments` on the same line as `make` targets.
