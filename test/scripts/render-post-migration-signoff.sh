@@ -30,12 +30,13 @@ tracks = [
     ("Go modules", "GO-MODULES-SIGNOFF.md", doc.get("go_modules_signoff")),
     ("Per-repo CI", "REPO-CI-SIGNOFF.md", doc.get("repo_ci_signoff")),
     ("Go CI", "GO-CI-SIGNOFF.md", doc.get("go_ci_signoff")),
+    ("mode-sdk release", "MODE-SDK-RELEASE-SIGNOFF.md", doc.get("mode_sdk_release_signoff")),
 ]
 rows = "\n".join(
     f"| {name} | [{md}](./{md}) | {ver or '—'} |"
     for name, md, ver in tracks
 )
-md = f"""# Post-migration sign-off (Sprints 32–49)
+md = f"""# Post-migration sign-off (Sprints 32–50)
 
 **Date:** {ts}  
 **Release:** {rel}  

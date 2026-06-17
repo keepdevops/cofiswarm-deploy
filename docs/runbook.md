@@ -114,6 +114,8 @@ make go-modules
 ./scripts/install-repo-ci.sh
 make repo-ci
 make go-ci                    # mode-* CI checks out mode-sdk + go.work
+./scripts/tag-mode-sdk.sh
+make mode-sdk-release
 ```
 
 ## Paste traps

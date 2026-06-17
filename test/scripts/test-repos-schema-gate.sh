@@ -24,6 +24,7 @@ for key in (
     "go_modules_signoff",
     "repo_ci_signoff",
     "go_ci_signoff",
+    "mode_sdk_release_signoff",
     "version",
 ):
     if not doc.get(key):
