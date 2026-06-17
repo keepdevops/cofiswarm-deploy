@@ -1,0 +1,14 @@
+# Model weights and large binaries — never commit
+models/
+*.gguf
+*.safetensors
+*.bin
+
+# Python caches
+__pycache__/
+*.pyc
+.venv*/
+
+# Local KV slot dumps / scratch
+kv-slots/
+*.log
