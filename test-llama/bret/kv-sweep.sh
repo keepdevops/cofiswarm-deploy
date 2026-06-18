@@ -56,6 +56,11 @@ for bin in "$BENCH_BIN" "$PPL_BIN"; do
         exit 1
     fi
 done
+if ! command -v jq >/dev/null 2>&1; then
+    echo "❌ Error: 'jq' is required to parse llama-bench JSON output." >&2
+    echo "   Install with: brew install jq" >&2
+    exit 1
+fi
 if [ ! -f "$MODEL_PATH" ]; then
     echo "❌ Error: Model not found at $MODEL_PATH" >&2
     ls -lh "$MODEL_DIR/" 2>/dev/null >&2 || echo "   (models folder empty)" >&2
@@ -85,18 +90,18 @@ kv_mem_gib() {
 
 # Run llama-bench for one KV type; echo "<prefill_ts> <gen_ts>" (or "n/a n/a").
 run_bench() {
-    local kv="$1" csv pp_ts tg_ts
-    if ! csv="$("$BENCH_BIN" -m "$MODEL_PATH" -p "$N_PROMPT" -n "$N_GEN" \
+    local kv="$1" json pp_ts tg_ts
+    if ! json="$("$BENCH_BIN" -m "$MODEL_PATH" -p "$N_PROMPT" -n "$N_GEN" \
                     --n-gpu-layers "$GPU_LAYERS" -t "$CPU_THREADS" \
-                    -fa 1 -ctk "$kv" -ctv "$kv" -r "$REPETITIONS" -o csv 2>/dev/null)"; then
+                    -fa 1 -ctk "$kv" -ctv "$kv" -r "$REPETITIONS" -o json 2>/dev/null)"; then
         echo "❌ Error: llama-bench failed for KV=$kv" >&2
         echo "n/a n/a"; return
     fi
-    # CSV columns vary by build; locate n_gen and avg_ts by header name.
-    pp_ts="$(awk -F',' 'NR==1{for(i=1;i<=NF;i++){gsub(/"/,"",$i);if($i=="n_gen")g=i;if($i=="avg_ts")a=i}}
-                        NR>1{gsub(/"/,"",$g);gsub(/"/,"",$a);if($g==0)print $a}' <<<"$csv" | head -1)"
-    tg_ts="$(awk -F',' 'NR==1{for(i=1;i<=NF;i++){gsub(/"/,"",$i);if($i=="n_gen")g=i;if($i=="avg_ts")a=i}}
-                        NR>1{gsub(/"/,"",$g);gsub(/"/,"",$a);if($g>0)print $a}' <<<"$csv" | head -1)"
+    # JSON output (not CSV): cpu_info/gpu_info/backends contain commas inside
+    # quoted fields, which misalign a naive comma-split and produce bogus t/s.
+    # avg_ts is tokens/sec; prefill rows have n_gen==0, generation rows n_gen>0.
+    pp_ts="$(jq -r 'map(select(.n_gen==0))[0].avg_ts // empty | (.*100|round)/100' <<<"$json" 2>/dev/null)"
+    tg_ts="$(jq -r 'map(select(.n_gen>0))[0].avg_ts // empty | (.*100|round)/100' <<<"$json" 2>/dev/null)"
     echo "${pp_ts:-n/a} ${tg_ts:-n/a}"
 }
 
