@@ -32,6 +32,11 @@ KV_TYPE_V="q8_0"
 # Value = min chunk size (tokens) to attempt reusing; 0 disables.
 CACHE_REUSE=256
 
+# KV-cache defragmentation threshold (--defrag-thold). -1 disables defrag.
+# kv-defrag-bench.sh found -1 wins here (lowest prefill, highest gen t/s):
+# with --kv-unified, defrag adds overhead without payoff. (-dt is DEPRECATED.)
+DEFRAG_THOLD=-1
+
 # Persistent KV cache: directory where slots can save/restore their KV state to
 # disk (survives restarts). Enables /slots?action=save|restore|erase, driven by
 # slot-cache.sh. --slots exposes per-slot status for slot-cache.sh status/list.
@@ -114,6 +119,7 @@ ARGS=(
   -ctk "$KV_TYPE_K"
   -ctv "$KV_TYPE_V"
   --cache-reuse "$CACHE_REUSE"
+  --defrag-thold "$DEFRAG_THOLD"
   --slot-save-path "$SLOT_SAVE_PATH"
   --slots
   --port "$PORT"
