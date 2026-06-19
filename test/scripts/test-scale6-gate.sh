@@ -21,11 +21,16 @@ def mlx_audit(path):
     scout = next((a for a in doc.get("agents", []) if a.get("name") == "mlx-scout"), None)
     if not scout:
         return {"pass": False}
-    model = scout.get("model") or ""
+    model = (scout.get("model") or "").lower()
+    kv = (scout.get("kv_cache_type") or "").lower()
+    # Turbo lane must be actually wired, not just named: turbo_quant flag or a
+    # quantized kv_cache_type, in addition to the 4bit model convention.
+    turbo_wired = bool(scout.get("turbo_quant")) or kv.startswith("q")
     checks = {
         "engine_mlx": scout.get("engine") == "mlx",
         "max_concurrency_1": scout.get("max_concurrency", 1) == 1,
-        "quant_4bit": "4bit" in model.lower(),
+        "quant_4bit": "4bit" in model,
+        "turbo_lane_wired": turbo_wired,
     }
     return {"pass": all(checks.values()), "checks": checks}
 
