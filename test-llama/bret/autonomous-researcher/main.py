@@ -25,6 +25,9 @@ LLM_MODEL = os.getenv("LLM_MODEL", "local")
 LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.2"))
 LLM_MAX_TOKENS = int(os.getenv("LLM_MAX_TOKENS", "8192"))
 MAX_ITERATIONS = int(os.getenv("MAX_ITERATIONS", "12"))
+# A weak model can emit malformed tool calls that the server rejects with a 500.
+# Feed the error back so the model can retry, but bail after this many in a row.
+MAX_CONSECUTIVE_LLM_ERRORS = int(os.getenv("MAX_CONSECUTIVE_LLM_ERRORS", "3"))
 
 SYSTEM_PROMPT = (
     "You are an expert autonomous researcher running 100% locally. You have "
@@ -51,6 +54,12 @@ def call_llm(client: httpx.Client, messages: List[Dict[str, Any]]) -> Dict[str, 
             },
         )
         resp.raise_for_status()
+    except httpx.HTTPStatusError as exc:
+        # Surface the server body (e.g. llama.cpp "Failed to parse input ..." on a
+        # malformed tool call), which raise_for_status() otherwise discards.
+        detail = exc.response.text.strip()
+        logger.error("call_llm got %s: %s", exc.response.status_code, detail)
+        raise RuntimeError(f"LLM request failed ({exc.response.status_code}): {detail}") from exc
     except httpx.HTTPError as exc:
         logger.error("call_llm request failed: %s", exc)
         raise RuntimeError(f"LLM request failed: {exc}") from exc
@@ -89,9 +98,32 @@ def research(question: str) -> str:
         {"role": "user", "content": question},
     ]
 
+    consecutive_errors = 0
     with httpx.Client(base_url=LLM_BASE_URL, timeout=None) as client:
         for step in range(MAX_ITERATIONS):
-            message = call_llm(client, messages)
+            try:
+                message = call_llm(client, messages)
+            except RuntimeError as exc:
+                consecutive_errors += 1
+                logger.error(
+                    "research: LLM error %d/%d at step %d: %s",
+                    consecutive_errors, MAX_CONSECUTIVE_LLM_ERRORS, step, exc,
+                )
+                if consecutive_errors >= MAX_CONSECUTIVE_LLM_ERRORS:
+                    raise RuntimeError(
+                        f"LLM failed {consecutive_errors} times in a row: {exc}"
+                    ) from exc
+                # Nudge the model to recover (e.g. emit one well-formed tool call).
+                messages.append({
+                    "role": "user",
+                    "content": (
+                        f"The previous request failed: {exc}. Emit exactly one "
+                        "well-formed tool call, or give your final answer."
+                    ),
+                })
+                continue
+
+            consecutive_errors = 0
             messages.append(message)
 
             tool_calls = message.get("tool_calls") or []
