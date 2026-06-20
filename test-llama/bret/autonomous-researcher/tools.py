@@ -13,6 +13,9 @@ logger = logging.getLogger(__name__)
 
 SEARXNG_URL = os.getenv("SEARXNG_URL", "http://localhost:8080")
 HTTP_TIMEOUT = float(os.getenv("HTTP_TIMEOUT", "20"))
+# Cap extracted page text so a single read_url can't overflow the LLM context.
+# ~12k chars ≈ ~3k tokens, leaving room for history within an 8k window.
+READ_URL_MAX_CHARS = int(os.getenv("READ_URL_MAX_CHARS", "12000"))
 
 
 class SearchQuery(BaseModel):
@@ -107,7 +110,14 @@ def read_url(args: dict) -> str:
     for tag in soup(["script", "style", "noscript", "header", "footer", "nav"]):
         tag.decompose()
     lines = [ln.strip() for ln in soup.get_text("\n").splitlines() if ln.strip()]
-    return "\n".join(lines)
+    text = "\n".join(lines)
+    if len(text) > READ_URL_MAX_CHARS:
+        logger.warning(
+            "read_url: truncated %r from %d to %d chars",
+            params.url, len(text), READ_URL_MAX_CHARS,
+        )
+        text = text[:READ_URL_MAX_CHARS] + "\n\n[...truncated...]"
+    return text
 
 
 def write_file(args: dict) -> str:
