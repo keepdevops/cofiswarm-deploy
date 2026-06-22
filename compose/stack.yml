@@ -87,6 +87,30 @@ services:
       timeout: 5s
       retries: 6
 
+  # WebSocket gateway for the Observer Panel: bridges browser dashboards (full-duplex
+  # ws://) to the carrier — SUBs the egress :5557 for events, PUBs commands to the ingress
+  # :5556 (guarded by COFISWARM_CMD_PREFIX). Dashboard + /ws on :8820.
+  observer-gateway:
+    build:
+      context: ${COFISWARM_REPOS_ROOT:?}/cofiswarm-observer-gateway
+      dockerfile: Dockerfile
+    image: cofiswarm-observer-gateway:local
+    container_name: cofiswarm-observer-gateway
+    restart: unless-stopped
+    environment:
+      COFISWARM_ZMQ_EGRESS_ADDR: tcp://zmq-bridge:5557 # events in (SUB)
+      COFISWARM_ZMQ_ADDR: tcp://zmq-bridge:5556         # commands out (PUB to ingress)
+    ports:
+      - "8820:8820"
+    depends_on:
+      zmq-bridge:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8820/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
   ui:
     build:
       context: ${COFISWARM_REPOS_ROOT:?}/cofiswarm-ui
