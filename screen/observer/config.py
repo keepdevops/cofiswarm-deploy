@@ -53,6 +53,12 @@ SERVICES = [
         "container": "plantuml-airgap",
         "port": 8079,  # host 127.0.0.1:8079 -> container 8080
     },
+    {
+        "name": "observer",
+        "label": "Observer (self)",
+        "container": "cofiswarm-observer",
+        "port": 8810,  # host 8810 -> container 8800 (this dashboard)
+    },
 ]
 
 
