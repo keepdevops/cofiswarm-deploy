@@ -29,6 +29,64 @@ services:
       timeout: 3s
       retries: 10
 
+  # ZMQ carrier (the "one carrier"): ingress SUB :5556 collects swarm.* from component
+  # PUBs, re-emits on egress PUB :5557; HTTP control plane on :5555. The final image does
+  # not bundle spec/topics.yaml, so the topic set is mounted in and pointed at by
+  # COFISWARM_ZMQ_TOPICS (otherwise startup log.Fatals on a missing topics file).
+  zmq-bridge:
+    build:
+      context: ${COFISWARM_REPOS_ROOT:?}/cofiswarm-zmq-bridge
+      dockerfile: Dockerfile
+    image: cofiswarm-zmq-bridge:local
+    container_name: cofiswarm-zmq-bridge
+    restart: unless-stopped
+    environment:
+      COFISWARM_BUS: zmq
+      COFISWARM_ZMQ_ADDR: tcp://*:5556        # ingress: component PUBs -> carrier
+      COFISWARM_ZMQ_EGRESS_ADDR: tcp://*:5557 # egress: carrier -> observer SUB
+      COFISWARM_ZMQ_TOPICS: /etc/cofiswarm/zmq/topics.yaml
+    command: ["--listen", ":5555"]
+    volumes:
+      - ${COFISWARM_REPOS_ROOT}/cofiswarm-zmq-bridge/spec/topics.yaml:/etc/cofiswarm/zmq/topics.yaml:ro
+    ports:
+      - "5555:5555"   # HTTP control plane: /v1/publish, /v1/stream, /healthz
+      - "5556:5556"   # ZMQ ingress wire
+      - "5557:5557"   # ZMQ egress wire
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:5555/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  # Telemetry hub: subscribes to the carrier's egress over ZMQ and republishes translated
+  # presence/hello back via the bridge HTTP control plane. Roster/alerts at :8016/v1/observed.
+  observer:
+    build:
+      context: ${COFISWARM_REPOS_ROOT:?}/cofiswarm-observer
+      dockerfile: Dockerfile
+    image: cofiswarm-observer:local
+    # Namespaced to avoid colliding with other projects that name a container
+    # "cofiswarm-observer". The compose service name stays "observer" (its network alias),
+    # so intra-stack DNS and COFISWARM_BRIDGE_URL wiring are unaffected.
+    container_name: cofiswarm-stack-observer
+    restart: unless-stopped
+    environment:
+      COFISWARM_ZMQ_EGRESS_ADDR: tcp://zmq-bridge:5557 # subscribe to carrier egress
+      COFISWARM_BRIDGE_URL: http://zmq-bridge:5555      # presence republish + SSE fallback
+    volumes: *fhs-volumes
+    ports:
+      - "8016:8016"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      zmq-bridge:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8016/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
   ui:
     build:
       context: ${COFISWARM_REPOS_ROOT:?}/cofiswarm-ui
