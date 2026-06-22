@@ -1,0 +1,111 @@
+/* Observer — brewlate light theme (cream + terracotta), monospace.
+   Tokens lifted from cofiswarmai's brewlate-themes.css so the Observer
+   matches the swarm Configure screen. */
+:root {
+  --bg:            #f6f5f0;
+  --panel:         #ffffff;
+  --panel-inner:   #f0ede6;
+  --border:        #d8d6cc;
+  --border-subtle: #e8e6df;
+  --accent:        #b85c38;
+  --accent-dim:    #9a4a28;
+  --accent-bright: #c87050;
+  --text:          #2a2420;
+  --text-muted:    #6a6058;
+  --text-dim:      #9a9088;
+  --ok:            #1a7a42;
+  --warn:          #b45309;
+  --crit:          #c0392b;
+  --btn-grad:      linear-gradient(135deg, #c87050 0%, #a04830 100%);
+  --gap:           16px;
+  --radius:        6px;
+  --mono:          "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font-family: var(--mono); font-size: 13px; line-height: 1.4;
+}
+
+/* Header */
+.obs-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 24px; border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+.obs-brand { display: flex; align-items: center; gap: 12px; }
+.obs-logo {
+  width: 36px; height: 36px; border-radius: var(--radius);
+  background: var(--btn-grad); display: grid; place-items: center;
+  color: #fff; font-weight: 700; font-size: 16px;
+}
+.obs-title { font-size: 20px; font-weight: 700; color: var(--accent); letter-spacing: .5px; }
+.obs-sub { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+.obs-conn { display: flex; align-items: center; gap: 8px; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+.obs-conn .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--text-dim); }
+.obs-conn.live .dot { background: var(--ok); box-shadow: 0 0 6px var(--ok); }
+.obs-conn.dead .dot { background: var(--crit); }
+
+.obs-section-title {
+  padding: 18px 24px 4px; color: var(--accent-dim);
+  text-transform: uppercase; letter-spacing: 2px; font-size: 12px; font-weight: 700;
+}
+
+/* Summary chips */
+.obs-summary { display: flex; gap: 12px; padding: 8px 24px 0; flex-wrap: wrap; }
+.chip {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 10px 16px; min-width: 120px;
+}
+.chip .n { font-size: 22px; font-weight: 700; }
+.chip .l { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+.chip.ok .n { color: var(--ok); }
+.chip.warn .n { color: var(--warn); }
+.chip.crit .n { color: var(--crit); }
+
+/* Service grid */
+.obs-grid {
+  display: grid; gap: var(--gap); padding: 12px 24px 32px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+.card {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 16px;
+  border-left: 4px solid var(--text-dim); transition: border-color .2s;
+}
+.card.up    { border-left-color: var(--ok); }
+.card.down  { border-left-color: var(--crit); }
+.card.partial { border-left-color: var(--warn); }
+.card-head { display: flex; justify-content: space-between; align-items: baseline; }
+.card-name { font-weight: 700; font-size: 15px; }
+.card-container { font-size: 10px; color: var(--text-dim); }
+.badge {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
+  padding: 2px 8px; border-radius: 10px; font-weight: 700;
+}
+.badge.up { background: rgba(26,122,66,.12); color: var(--ok); }
+.badge.down { background: rgba(192,57,43,.12); color: var(--crit); }
+.badge.partial { background: rgba(180,83,9,.12); color: var(--warn); }
+
+.signals { margin-top: 12px; display: grid; gap: 8px; }
+.sig { display: flex; align-items: center; gap: 10px; }
+.sig .k { width: 64px; font-size: 10px; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--text-muted); }
+.sig .led { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--text-dim); }
+.sig.s-ok .led, .sig.s-up .led, .sig.s-open .led, .sig.s-running .led { background: var(--ok); }
+.sig.s-down .led, .sig.s-closed .led, .sig.s-absent .led, .sig.s-exited .led { background: var(--crit); }
+.sig.s-unknown .led, .sig.s-unavailable .led, .sig.s-starting .led { background: var(--warn); }
+.sig.s-na .led { background: var(--border); }
+.sig .v { font-size: 12px; color: var(--text); }
+.sig .v .det { color: var(--text-dim); font-size: 11px; }
+.sig.s-na .v { color: var(--text-dim); }
+
+.obs-foot { padding: 12px 24px 28px; color: var(--text-dim); font-size: 11px; }
+.banner {
+  margin: 12px 24px 0; padding: 10px 14px; border-radius: var(--radius);
+  background: rgba(192,57,43,.08); border: 1px solid rgba(192,57,43,.3);
+  color: var(--crit); font-size: 12px;
+}
+.banner.hidden { display: none; }

@@ -1,0 +1,28 @@
+# Run the Observer in a container.
+#
+#   docker compose up --build
+#   open http://127.0.0.1:8810
+#
+# IMPORTANT caveats:
+#  * The Docker socket is mounted read-only so `docker ps` can see host
+#    containers. This grants the container control-plane visibility of your
+#    daemon — only run it where that is acceptable.
+#  * Port probes target `host.docker.internal`. On Docker Desktop (macOS /
+#    Windows) this resolves automatically. On Linux it is provided here via
+#    the host-gateway extra_hosts entry. It reaches ports PUBLISHED to the
+#    host (the left side of docker's "HOST->CONTAINER" mapping) — not ports
+#    that are only exposed inside a private container network.
+services:
+  observer:
+    build: .
+    container_name: cofiswarm-observer
+    ports:
+      - "8810:8800"            # host 8810 -> container 8800
+    environment:
+      OBSERVER_PROBE_HOST: host.docker.internal
+      OBSERVER_POLL: "2.0"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # needed on Linux; harmless on Desktop
+    restart: unless-stopped

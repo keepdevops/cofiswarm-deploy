@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cofiswarm Observer</title>
+  <link rel="stylesheet" href="/static/observer.css" />
+</head>
+<body>
+  <header class="obs-header">
+    <div class="obs-brand">
+      <div class="obs-logo">◉</div>
+      <div>
+        <div class="obs-title">Observer</div>
+        <div class="obs-sub">Docker · ZMQ · Ports</div>
+      </div>
+    </div>
+    <div id="conn" class="obs-conn">
+      <span class="dot"></span><span id="conn-label">connecting…</span>
+    </div>
+  </header>
+
+  <div id="banner" class="banner hidden"></div>
+
+  <div class="obs-section-title">Overview</div>
+  <div id="summary" class="obs-summary"></div>
+
+  <div class="obs-section-title">Services</div>
+  <div id="grid" class="obs-grid"></div>
+
+  <footer class="obs-foot">
+    <span id="updated">awaiting first snapshot…</span>
+  </footer>
+
+  <script src="/static/observer.js"></script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+# Observer dependencies. The server itself is stdlib-only; pyzmq is needed
+# only for live ZMQ probing. Without it, ZMQ signals report "unavailable".
+pyzmq>=25.0
