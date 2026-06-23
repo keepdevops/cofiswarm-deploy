@@ -10,7 +10,8 @@ from pathlib import Path
 
 repos_file, repos_root = Path(sys.argv[1]), Path(sys.argv[2])
 doc = json.loads(repos_file.read_text())
-archived = {"cofiswarm-coordinator", "cofiswarm-proxy", "cofiswarm-gateway"}
+archived = {"cofiswarm-coordinator", "cofiswarm-proxy", "cofiswarm-gateway",
+            "cofiswarm-pgvector"}  # RAG is serverless (sqlite-vec) now
 pins = {}
 for r in doc["repos"]:
     name = r["name"]
