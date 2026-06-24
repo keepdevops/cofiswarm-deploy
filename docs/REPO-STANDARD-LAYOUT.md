@@ -400,7 +400,7 @@ Applies to: `config`, `agent-registry` (if split).
 | `observer-sdk` | spec | — | — |
 | `models` | scripts | `scripts/` | host: `/var/lib/cofiswarm/models` |
 | `grafana` | json | `dashboards/` | — |
-| `pgvector` | docker | compose fragment | `pgvector/data/` |
+| `pgvector` | docker | compose fragment | `pgvector/data/` | _(archived — RAG is serverless sqlite-vec now)_ |
 | `docs` | md | — | — |
 
 ---

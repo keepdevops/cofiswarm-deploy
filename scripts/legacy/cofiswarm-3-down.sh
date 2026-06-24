@@ -9,10 +9,8 @@
 
 
 
-./brewctl down 
-docker stop matrix-pgvector 2>/dev/null || true
-sleep 2
-docker rm matrix-pgvector 2>/dev/null || true
+./brewctl down
+# RAG is serverless (sqlite-vec) now — no matrix-pgvector container to stop.
 
 ./brewctl check
 echo "----------------------"

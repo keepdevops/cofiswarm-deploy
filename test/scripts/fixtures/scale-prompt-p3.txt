@@ -22,8 +22,9 @@ SELECTED line to pick agents.
 
 ## Storage
 
-Sessions and history live under FHS var/lib/cofiswarm/dispatch. RAG uses postgres pgvector on
-port 5433. UI nginx gateways /api/* to backend services.
+Sessions and history live under FHS var/lib/cofiswarm/dispatch. RAG uses a serverless
+sqlite-vec store (a local .db file under var/lib/cofiswarm/rag/index). UI nginx gateways
+/api/* to backend services.
 
 ## SCALE gate
 
