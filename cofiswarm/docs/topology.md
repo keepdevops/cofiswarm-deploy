@@ -109,6 +109,18 @@ block to those agents' prompts (flat/pipeline/cascade/router, buffered + streami
 Request-level `use_rag`/`rag_agents` take precedence; an unreachable registry degrades
 to per-agent RAG off (dispatch never blocks).
 
+**Verified end-to-end (2026-06-24).** Booted `cofiswarm-rag` (sqlite-vec, hash
+embedder) + `agent-registry` (reviewer flagged `use_rag`) + `dispatch` + `mode-flat`
+with a stub agent on the reviewer port. A plain `POST /api/architect` carrying **no RAG
+flags** produced, end to end:
+
+1. `agent-registry` `GET /api/agents` exposed `reviewer` with `use_rag:true, rag_top_k:5`.
+2. `dispatch` `meta.rag` → `requested:true, used:true, targeted_agents:["reviewer"], top_k:5`
+   — the targeting came solely from the roster, not the request.
+3. `cofiswarm-rag` returned the ingested chunk (cosine distance 0.55).
+4. `mode-flat` prepended the block — the agent received
+   `<context source="rag">…</context>` followed by the original prompt as its user message.
+
 ### NATS subjects (observed)
 
 `swarm.observer.presence` · `swarm.observer.alert` · `swarm.observer.hello` ·
