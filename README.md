@@ -8,7 +8,7 @@ Stack orchestration — FHS config render + compose profiles + host service laun
 cp .env.example .env
 make render-config
 make compose-config
-make stack-up      # docker pgvector + host Go services
+make stack-up      # nats bus + host Go services (RAG is serverless sqlite-vec)
 make stack-down
 ```
 
@@ -25,8 +25,10 @@ make stack-down
 
 | Profile | Compose | Host infer |
 |---------|---------|------------|
-| `8gb` | pgvector | gemma2b (scout) |
-| `16gb` | pgvector + ui stub | full server_groups |
-| `32gb` | pgvector + ui stub | full roster |
+| `8gb` | nats | gemma2b (scout) |
+| `16gb` | nats + ui stub | full server_groups |
+| `32gb` | nats + ui stub | full roster |
+
+RAG is serverless (sqlite-vec, a local `.db` file) — no database container.
 
 Gate: `make test` → SCALE-0 (`test/gates/SCALE-0.md`).

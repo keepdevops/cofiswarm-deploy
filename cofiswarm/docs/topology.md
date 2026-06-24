@@ -28,7 +28,7 @@ coupling is at the wire, not the build.
 | `cofiswarm-mode-cascade` | `:8023` | README |
 | `cofiswarm-mode-router` | `:8024` | README |
 | `cofiswarm-zmq-bridge` | `:5555` HTTP / `:4222` NATS | `internal/bus/nats.go` |
-| `pgvector` | `:5433` | port scan |
+| RAG store | sqlite-vec `rag.db` (no port) | `cofiswarm-rag` `store_sqlite.py` |
 | Prometheus / Grafana | `:9090` / `:3030` | `cofiswarm-grafana` README |
 | `cofiswarm-ui` | `:3000` *(inferred)* | port scan |
 
@@ -50,7 +50,7 @@ flowchart TD
         KVP["kvpool :8014<br/>token budget, eviction"]
         RAG["cofiswarm-rag :8001"]
         RAGW["cofiswarm-rag-worker"]
-        PGV[("pgvector :5433")]
+        PGV[("sqlite-vec<br/>rag.db file")]
         CONV["convert :8015<br/>GGUF→MLX"]
         INFER["infer-mlx / -llama / -vllm<br/>-ollama / -sglang<br/>backend-mlx / -llama / -sdk"]
     end
