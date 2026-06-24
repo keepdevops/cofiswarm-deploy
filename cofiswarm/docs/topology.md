@@ -74,6 +74,8 @@ flowchart TD
     DISP -->|RAG inject| RAG
     RAG --> PGV
     RAGW --> PGV
+    DISP -.->|roster: per-agent use_rag| REG
+    DISP -->|rag block via mode_config| MFLAT & MPIPE & MCASC & MROUT
 
     MFLAT -.->|agent_registry_url| REG
     MFLAT -.->|slot_manager_url| SLOT
@@ -96,6 +98,16 @@ flowchart TD
 
     LAUNCH -.->|compose up| DISP
 ```
+
+### Per-agent RAG (`use_rag`)
+
+An agent with `use_rag: true` in the registry roster auto-receives retrieved context:
+`dispatch` reads the roster (`GET /api/agents`), enables retrieval for those agents,
+fetches chunks from `cofiswarm-rag` (sqlite-vec), and forwards the rendered block to
+the selected mode via `mode_config["rag"] = {block, agents}`. The mode prepends the
+block to those agents' prompts (flat/pipeline/cascade/router, buffered + streaming).
+Request-level `use_rag`/`rag_agents` take precedence; an unreachable registry degrades
+to per-agent RAG off (dispatch never blocks).
 
 ### NATS subjects (observed)
 
