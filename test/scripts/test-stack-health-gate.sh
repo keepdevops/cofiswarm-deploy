@@ -51,14 +51,7 @@ fi
 
 probe ui-gateway "${UI}/api/health"
 
-if lsof -iTCP:5433 -sTCP:LISTEN >/dev/null 2>&1; then
-  if command -v pg_isready >/dev/null 2>&1; then
-    pg_isready -h "$HOST" -p 5433 -U matrix -d matrix_rag >/dev/null \
-      && echo "ok: pgvector :5433" \
-      || echo "warn: pgvector port open but pg_isready failed"
-  else
-    echo "ok: pgvector :5433 (port open)"
-  fi
-fi
+# RAG store health is covered by the rag /health probe above (sqlite-vec,
+# no Postgres container to check).
 
 echo "ok: stack health"

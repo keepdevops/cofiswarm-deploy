@@ -22,39 +22,19 @@ export COFISWARM_COORDINATOR_CONFIG="${FHS}/etc/cofiswarm/config/coordinator.jso
 export COFISWARM_MODELS_MANIFEST="${REPOS}/cofiswarm-models/catalog/manifest.json"
 export COFISWARM_RAG_URL="http://127.0.0.1:8001"
 export COFISWARM_SLOT_MANAGER_URL="http://127.0.0.1:8013"
-export RAG_DSN="${RAG_DSN:-postgresql://matrix:matrix@127.0.0.1:5433/matrix_rag}"
+# RAG is serverless (sqlite-vec) — a file under FHS, no Postgres container.
+export RAG_STORE="${RAG_STORE:-sqlite}"
+export RAG_SQLITE_PATH="${RAG_SQLITE_PATH:-${FHS}/var/lib/cofiswarm/rag/index/rag.db}"
 export MATRIX_LLAMA_SERVER="${MATRIX_LLAMA_SERVER:-}"
 
 "${ROOT}/scripts/render-config.sh"
-
-pg_reuse_ok() {
-  if ! lsof -iTCP:5433 -sTCP:LISTEN >/dev/null 2>&1; then
-    return 1
-  fi
-  if command -v pg_isready >/dev/null 2>&1; then
-    pg_isready -h 127.0.0.1 -p 5433 -U matrix -d matrix_rag >/dev/null 2>&1 && return 0
-  fi
-  local c
-  for c in matrix-pgvector cofiswarm-pgvector; do
-    if docker ps --format '{{.Names}}' 2>/dev/null | grep -qx "$c"; then
-      docker exec "$c" pg_isready -U matrix -d matrix_rag >/dev/null 2>&1 && return 0
-    fi
-  done
-  return 1
-}
 
 echo "==> docker compose profile ${PROFILE}"
 export COFISWARM_FHS_ROOT="$FHS"
 export COFISWARM_REPOS_ROOT="$REPOS"
 docker rm -f cofiswarm-ui-stub 2>/dev/null || true
 COMPOSE=(docker compose -f compose/stack.yml -f "compose/profiles/${PROFILE}.yml" --profile "$PROFILE")
-if pg_reuse_ok; then
-  echo "==> pgvector: reusing Postgres on :5433 (skip cofiswarm-pgvector)"
-  docker rm -f cofiswarm-pgvector 2>/dev/null || true
-  "${COMPOSE[@]}" up -d --scale pgvector=0
-else
-  "${COMPOSE[@]}" up -d
-fi
+"${COMPOSE[@]}" up -d
 
 LOGDIR="${FHS}/var/log/cofiswarm/host-services"
 mkdir -p "$LOGDIR" "${COFISWARM_RUN_ROOT}"
@@ -242,7 +222,8 @@ done
 
 start_py_svc rag env \
   COFISWARM_COORDINATOR_CONFIG="${COFISWARM_COORDINATOR_CONFIG}" \
-  RAG_DSN="${RAG_DSN}" \
+  RAG_STORE="${RAG_STORE}" \
+  RAG_SQLITE_PATH="${RAG_SQLITE_PATH}" \
   RAG_INGEST_HOST=0.0.0.0 \
   PYTHONPATH="${REPOS}/cofiswarm-rag/src" \
   python3 "${REPOS}/cofiswarm-rag/scripts/ingest-server.py"

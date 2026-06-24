@@ -307,7 +307,8 @@
       "role": "infra",
       "phase": 2,
       "required": false,
-      "pin": "4b65ed43227d8762b2f1960cf21e3b3cd5af9e51"
+      "pin": "4b65ed43227d8762b2f1960cf21e3b3cd5af9e51",
+      "status": "archived"
     }
   ],
   "release": "v1.1.0",
