@@ -120,6 +120,11 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     restart: unless-stopped
+    # Serve the LIVE swarm-config (14 agents) over the build-time-baked static fallback — the UI's
+    # fetchSwarmConfig falls back to /swarm-config.json when /api/swarm-config 404s, and the baked
+    # copy was stale (missing reflector). Bind the canonical config so it's always current.
+    volumes:
+      - ${COFISWARM_REPOS_ROOT}/cofiswarm-config/swarm-config.json:/usr/share/nginx/html/swarm-config.json:ro
     depends_on: []
 
 volumes:
