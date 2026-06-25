@@ -45,6 +45,9 @@ services:
     # so intra-stack DNS and COFISWARM_BRIDGE_URL wiring are unaffected.
     container_name: cofiswarm-stack-observer
     restart: unless-stopped
+    # root so the mounted Docker socket is readable (the Docker-stats widget). Local dev only —
+    # the observer otherwise needs no privilege; drop this (and the socket mount) to disable it.
+    user: "0:0"
     environment:
       COFISWARM_ZMQ_EGRESS_ADDR: tcp://zmq-bridge:5557 # subscribe to carrier egress
       COFISWARM_BRIDGE_URL: http://zmq-bridge:5555      # presence republish + SSE fallback
@@ -53,6 +56,8 @@ services:
       # these into FHS). Agent-log output goes to a Docker-managed named volume — no FHS.
       - ${COFISWARM_REPOS_ROOT}/cofiswarm-observer/plugins:/var/lib/cofiswarm/observer/plugins:ro
       - cofiswarm-observer-logs:/var/log/cofiswarm
+      # read-only Docker socket — powers the dashboard's per-container Docker stats widget
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
       - "8016:8016"
     extra_hosts:
