@@ -41,8 +41,14 @@ all five (4 llama.cpp + 1 MLX) idempotently, port→model per
 `cofiswarm-slot-manager/configs/endpoints.json`; it also normalizes the MLX model's
 `tokenizer_class` quirk so a fresh pull can't break mlx-scout.
 
-**Reboot survival:** `bash scripts/install-host-inference-launchd.sh` installs the
-`com.cofiswarm.host-inference` LaunchAgent (RunAtLoad), which runs that script at login.
+**Reboot survival** (run each installer once):
+- `scripts/install-host-inference-launchd.sh` → `com.cofiswarm.host-inference` (RunAtLoad +
+  AbandonProcessGroup): relaunches the 5 inference servers at login.
+- `scripts/install-announcer-launchd.sh` → `com.cofiswarm.announcer` (RunAtLoad + KeepAlive):
+  keeps the broker-free responder presence loop alive across reboots/crashes.
+- The Docker containers carry `restart: unless-stopped`, so Docker Desktop restores them on boot.
+
+Together these three cover the whole stack on reboot; nothing needs a manual bring-up.
 
 ## One-command bring-up
 
