@@ -16,6 +16,10 @@ bad = []
 for name, pin in pins.items():
     if not pin:
         continue
+    # The manifest repo can't pin its own pin-update commit: pin-repos records
+    # HEAD, then committing the change advances HEAD past it. Self-exempt.
+    if name == "cofiswarm-deploy":
+        continue
     path = root / name
     if not (path / ".git").is_dir():
         continue
