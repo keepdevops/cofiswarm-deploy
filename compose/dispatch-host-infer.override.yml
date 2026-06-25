@@ -1,0 +1,77 @@
+# zmq plan / option B (standalone, env-configurable hosts): inference + mode components run in
+# containers but are addressed the same single-host/multi-port way the code assumes. Each neighbour
+# is reached via host.docker.internal / compose DNS so no component hardcodes another's location.
+#
+#   dispatch:
+#     - COFISWARM_AGENT_HOST            -> per-agent llama/MLX caller to host servers (8083-8087)
+#     - COFISWARM_MODE_HOST + ports     -> mode Execute to mode-* (8021-8024; flat remapped to 18021)
+#     - COFISWARM_ROUTE_BUS=""          -> zmq bus has no request/reply (501); route modes via HTTP
+#   mode-*:
+#     - mounted mode-<n>.yaml           -> infer_host: host.docker.internal + swarm_config_path
+#     - mounted swarm-config.json        -> the 14-agent roster (ports 8083-8087)
+#     - extra_hosts host.docker.internal -> reach the host llama servers from the container
+x-mode-common: &mode-common
+  extra_hosts:
+    - "host.docker.internal:host-gateway"
+
+services:
+  dispatch:
+    environment:
+      COFISWARM_AGENT_HOST: host.docker.internal
+      COFISWARM_MODE_HOST: http://host.docker.internal
+      # Host 8021 is owned by the host ob_code.run_modes Python stack, so mode-flat is
+      # published on 18021; the per-mode port knob points dispatch's Execute at it.
+      COFISWARM_MODE_FLAT_PORT: "18021"
+      COFISWARM_ROUTE_BUS: ""
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  mode-flat:
+    <<: *mode-common
+    environment:
+      COFISWARM_MODE_CONFIG: /etc/cofiswarm/mode-flat.live.yaml
+    volumes:
+      - /Users/caribou/cofiswarm/repos/cofiswarm-deploy/compose/mode-configs/mode-flat.yaml:/etc/cofiswarm/mode-flat.live.yaml:ro
+      - /Users/caribou/cofiswarm/repos/cofiswarm-deploy/compose/mode-bins/cofiswarm-mode-flat:/usr/local/bin/cofiswarm-mode-flat:ro
+      - /Users/caribou/cofiswarm/repos/cofiswarm-config/swarm-config.json:/etc/cofiswarm/swarm-config.json:ro
+    ports:
+      - "18021:8021"
+
+  mode-pipeline:
+    <<: *mode-common
+    environment:
+      COFISWARM_MODE_CONFIG: /etc/cofiswarm/mode-pipeline.live.yaml
+    volumes:
+      - /Users/caribou/cofiswarm/repos/cofiswarm-deploy/compose/mode-configs/mode-pipeline.yaml:/etc/cofiswarm/mode-pipeline.live.yaml:ro
+      - /Users/caribou/cofiswarm/repos/cofiswarm-deploy/compose/mode-bins/cofiswarm-mode-pipeline:/usr/local/bin/cofiswarm-mode-pipeline:ro
+      - /Users/caribou/cofiswarm/repos/cofiswarm-config/swarm-config.json:/etc/cofiswarm/swarm-config.json:ro
+    ports:
+      - "8022:8022"
+
+  mode-cascade:
+    <<: *mode-common
+    environment:
+      COFISWARM_MODE_CONFIG: /etc/cofiswarm/mode-cascade.live.yaml
+    volumes:
+      - /Users/caribou/cofiswarm/repos/cofiswarm-deploy/compose/mode-configs/mode-cascade.yaml:/etc/cofiswarm/mode-cascade.live.yaml:ro
+      - /Users/caribou/cofiswarm/repos/cofiswarm-deploy/compose/mode-bins/cofiswarm-mode-cascade:/usr/local/bin/cofiswarm-mode-cascade:ro
+      - /Users/caribou/cofiswarm/repos/cofiswarm-config/swarm-config.json:/etc/cofiswarm/swarm-config.json:ro
+    ports:
+      - "8023:8023"
+
+  mode-router:
+    <<: *mode-common
+    environment:
+      COFISWARM_MODE_CONFIG: /etc/cofiswarm/mode-router.live.yaml
+    volumes:
+      - /Users/caribou/cofiswarm/repos/cofiswarm-config/swarm-config.json:/etc/cofiswarm/swarm-config.json:ro
+      - /Users/caribou/cofiswarm/repos/cofiswarm-deploy/compose/mode-configs/mode-router.yaml:/etc/cofiswarm/mode-router.live.yaml:ro
+      - /Users/caribou/cofiswarm/repos/cofiswarm-deploy/compose/mode-bins/cofiswarm-mode-router:/usr/local/bin/cofiswarm-mode-router:ro
+    ports:
+      - "8024:8024"
+
+  # slot-manager runs internal-only (reachable as slot-manager:8013 on cofiswarm_default);
+  # host 8013 is owned by the host ob_code stack, so no host-port publish. !reset clears the
+  # base list (Compose concatenates ports otherwise, so a plain [] would not remove 8013:8013).
+  slot-manager:
+    ports: !reset []

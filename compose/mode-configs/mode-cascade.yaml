@@ -1,0 +1,12 @@
+# Option B (live): container-reachable neighbours + host inference. The deployed mode-sdk honours
+# infer_host (llama/MLX host) and swarm_config_path (agent roster) from YAML; host.docker.internal
+# reaches the host's llama servers (8083-8087) from inside the container.
+mode: mode-cascade
+listen: ":8023"
+dispatch_url: http://dispatch:8010
+slot_manager_url: http://slot-manager:8013
+kvpool_url: http://kvpool:8014
+agent_registry_url: http://agent-registry:8012
+swarm_config_path: /etc/cofiswarm/swarm-config.json
+infer_host: host.docker.internal
+default_max_tokens: 256
