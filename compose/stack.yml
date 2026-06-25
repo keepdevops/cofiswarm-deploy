@@ -1,12 +1,7 @@
-# Cofiswarm stack — Docker services with FHS bind mounts where applicable.
+# Cofiswarm stack — Docker observability plane (zmq-bridge, observer, gateway, ui).
+# Config is sourced from the repos (no FHS dependency); runtime/logs use named volumes.
 # Host infer + Go control plane: scripts/stack-up.sh (Metal / llama-server on host).
 name: cofiswarm
-
-x-fhs-volumes: &fhs-volumes
-  - ${COFISWARM_FHS_ROOT:?}/etc/cofiswarm:/etc/cofiswarm:ro
-  - ${COFISWARM_FHS_ROOT}/var/lib/cofiswarm:/var/lib/cofiswarm
-  - ${COFISWARM_FHS_ROOT}/var/log/cofiswarm:/var/log/cofiswarm
-  - ${COFISWARM_FHS_ROOT}/run/cofiswarm:/run/cofiswarm
 
 services:
   # ZMQ carrier (the "one carrier"): ingress SUB :5556 collects swarm.* from component
@@ -53,7 +48,11 @@ services:
     environment:
       COFISWARM_ZMQ_EGRESS_ADDR: tcp://zmq-bridge:5557 # subscribe to carrier egress
       COFISWARM_BRIDGE_URL: http://zmq-bridge:5555      # presence republish + SSE fallback
-    volumes: *fhs-volumes
+    volumes:
+      # Observer plugins are repo-sourced (their canonical home; render-config.sh used to copy
+      # these into FHS). Agent-log output goes to a Docker-managed named volume — no FHS.
+      - ${COFISWARM_REPOS_ROOT}/cofiswarm-observer/plugins:/var/lib/cofiswarm/observer/plugins:ro
+      - cofiswarm-observer-logs:/var/log/cofiswarm
     ports:
       - "8016:8016"
     extra_hosts:
@@ -104,3 +103,6 @@ services:
       - "host.docker.internal:host-gateway"
     restart: unless-stopped
     depends_on: []
+
+volumes:
+  cofiswarm-observer-logs:   # observer agent-log output (Docker-managed; replaces FHS /var/log)
