@@ -30,8 +30,9 @@ normally from their `go.mod` — just `docker compose build mode-flat mode-pipel
 mode-router`; no `go.work` replace or bind-mounted binaries required.
 
 > Legacy: before v1.2.3 was published the modes were cross-built against the local SDK and
-> bind-mounted over `/usr/local/bin/cofiswarm-mode-<n>` (artifacts in the git-ignored
-> `mode-bins/`). That stopgap is gone — the override no longer mounts binaries.
+> bind-mounted over `/usr/local/bin/cofiswarm-mode-<n>` (artifacts in a `mode-bins/` dir).
+> That stopgap is gone — the override no longer mounts binaries, and the `mode-bins/`
+> directory (and its `.gitignore` entry) have been removed.
 
 ## Host inference servers
 
