@@ -31,7 +31,10 @@ bound() { lsof -nP -iTCP:"$1" -sTCP:LISTEN >/dev/null 2>&1; }
 if bound 8090; then echo "ok: nomic-embed :8090 already bound"
 elif [[ ! -f "$NOMIC_MODEL" ]]; then echo "FAIL: missing nomic model $NOMIC_MODEL" >&2
 else
+  # nomic-embed-text-v1.5 supports 2048 ctx; size the batch to match so multi-hundred-token
+  # doc chunks fit in one physical batch (default 512 rejects chunks >512 tokens on ingest).
   nohup "$LLAMA_BIN" --embeddings -m "$NOMIC_MODEL" --host 127.0.0.1 --port 8090 -ngl 99 \
+    -c 2048 -b 2048 -ub 2048 \
     >>"$LOGDIR/nomic-8090.log" 2>&1 &
   echo "started: nomic-embed :8090 pid $!"
 fi
