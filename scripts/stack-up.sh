@@ -146,21 +146,6 @@ start_svc() {
   fi
 }
 
-start_py_svc() {
-  local name="$1"
-  shift
-  [[ $# -gt 0 ]] || { echo "skip: $name (no command)"; return 0; }
-  if [[ -f "${COFISWARM_RUN_ROOT}/${name}.pid" ]] && kill -0 "$(cat "${COFISWARM_RUN_ROOT}/${name}.pid")" 2>/dev/null; then
-    echo "running: $name"
-    return 0
-  fi
-  nohup "$@" >>"${LOGDIR}/${name}.log" 2>&1 &
-  local pid=$!
-  disown -h "$pid" 2>/dev/null || true
-  echo "$pid" > "${COFISWARM_RUN_ROOT}/${name}.pid"
-  echo "started: $name pid=$pid"
-}
-
 pick_and_export_mode_ports
 restart_if_stale dispatch "$MODE_PORTS_FILE"
 
@@ -227,13 +212,10 @@ start_svc rag "${REPOS}/cofiswarm-rag/bin/cofiswarm-rag" -host 0.0.0.0 -port 800
 wait_port 8001 rag || true
 start_svc rag-worker "${REPOS}/cofiswarm-rag-worker/bin/cofiswarm-rag-worker" -listen :8018
 wait_port 8018 rag-worker || true
-start_py_svc orchestrate env \
-  COFISWARM_CONFIG_ROOT="${FHS}/etc/cofiswarm/config" \
-  COFISWARM_COORDINATOR_CONFIG="${COFISWARM_COORDINATOR_CONFIG}" \
-  ORCH_SIDECAR_HOST=0.0.0.0 \
-  ORCH_SIDECAR_PORT=3003 \
-  PYTHONPATH="${REPOS}/cofiswarm-orchestrate/src" \
-  python3 "${REPOS}/cofiswarm-orchestrate/scripts/run-sidecar.py"
+# orchestrate is Go now (orch-sidecar). It reads COFISWARM_CONFIG_ROOT to locate
+# config/agents/; the Go MLX backend HTTP-clients the external mlx_lm.server.
+export COFISWARM_CONFIG_ROOT="${FHS}/etc/cofiswarm/config"
+start_svc orchestrate "${REPOS}/cofiswarm-orchestrate/bin/orch-sidecar" -host 0.0.0.0 -port 3003
 wait_port 3003 orchestrate || true
 
 echo "==> stack up complete (profile=${PROFILE})"
