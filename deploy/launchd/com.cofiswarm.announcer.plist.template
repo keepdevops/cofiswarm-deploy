@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.cofiswarm.announcer</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>-lc</string>
+    <string>"${COFISWARM_DEPLOY:-$HOME/cofiswarm/repos/cofiswarm-deploy}/compose/announce-responders.sh"</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <!-- Long-running re-announce loop (broker-free responder presence to the zmq-bridge).
+       launchd owns the foreground process and restarts it if it dies. If the bridge isn't
+       up yet at login the loop just logs and retries every interval, so no thrash. -->
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>${HOME}/Library/Logs/cofiswarm/launchd-announcer.log</string>
+  <key>StandardErrorPath</key>
+  <string>${HOME}/Library/Logs/cofiswarm/launchd-announcer.err</string>
+</dict>
+</plist>
