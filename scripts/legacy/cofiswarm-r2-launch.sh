@@ -9,6 +9,6 @@ proxy
 ### react-scripts
 node (React)
 npm
-rag-ingest-server
+cofiswarm-rag (Go)
 
 
