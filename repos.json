@@ -1,6 +1,6 @@
 {
   "org": "keepdevops",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "monorepo": "keepdevops/cofiswarmdev",
   "repos": [
     {
@@ -318,7 +318,7 @@
       "status": "archived"
     }
   ],
-  "release": "v1.1.0",
+  "release": "v1.2.0",
   "cutover": "v3.0.0-bridge",
   "monorepo_tag": "v3.0.0-bridge",
   "pins": {
