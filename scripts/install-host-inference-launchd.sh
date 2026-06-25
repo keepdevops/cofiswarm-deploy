@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Install the LaunchAgent that starts the host llama/MLX inference servers at login
-# (reboot survival). Mirrors install-launchd.sh (which installs stack-up).
+# (reboot survival). `make install-launchd` runs this alongside install-announcer-launchd.sh.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 [[ -f "${ROOT}/.env" ]] && set -a && source "${ROOT}/.env" && set +a
