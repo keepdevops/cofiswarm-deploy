@@ -1,6 +1,6 @@
 {
   "org": "keepdevops",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "monorepo": "keepdevops/cofiswarmdev",
   "repos": [
     {
@@ -8,7 +8,7 @@
       "role": "meta",
       "phase": 0,
       "required": true,
-      "pin": "16ba977cbdb44582886f1ecdf3af08bd52c14b88"
+      "pin": "930e842a1ea54de205d38bb730c1ea1dfc9dff82"
     },
     {
       "name": "cofiswarm-common",
@@ -76,7 +76,7 @@
       "role": "control",
       "phase": 2,
       "required": true,
-      "pin": "1343b2895e0b654d0e9c2692874d75e5b1d7c21c"
+      "pin": "3fd71c94aa62a558dc54a3cc534e09c0d340e7a7"
     },
     {
       "name": "cofiswarm-agent-registry",
@@ -97,14 +97,14 @@
       "role": "infer",
       "phase": 2,
       "required": true,
-      "pin": "4a92cd17e4798e8b9c00e457b6685b83607520df"
+      "pin": "8149eb264b0f71924eb6728739d6deaf54fb92cf"
     },
     {
       "name": "cofiswarm-orchestrate",
       "role": "sidecar",
       "phase": 2,
       "required": true,
-      "pin": "0f48d3b8fe42961141616c482bfac006aa30ed1f"
+      "pin": "4a339c8a69c8dc88b1f5f3d5c97cf2e1a00690b8"
     },
     {
       "name": "cofiswarm-rag",
@@ -125,21 +125,21 @@
       "role": "sdk",
       "phase": 2,
       "required": true,
-      "pin": "aab588ad0e39e0a10baec3b23eb35d24e9aa1b77"
+      "pin": "c15534ca8153cf4f51ff998de21f29a3858f14b4"
     },
     {
       "name": "cofiswarm-backend-llama",
       "role": "backend",
       "phase": 2,
       "required": true,
-      "pin": "bd1ab6962ef0bcd40b3a65fce60d96be0ad790b0"
+      "pin": "c873c22530ff34bafbc7776f3d25ae944cd7d341"
     },
     {
       "name": "cofiswarm-backend-mlx",
       "role": "backend",
       "phase": 2,
       "required": true,
-      "pin": "a5b9016065f045a7245516f94941f16a5db5c7eb"
+      "pin": "6a4197b9790a35a49118e2e80512db883b1080f0"
     },
     {
       "name": "cofiswarm-models",
@@ -293,7 +293,7 @@
       "role": "sidecar",
       "phase": 6,
       "required": false,
-      "pin": "184bfbf64742e7c8fa5b2cb0eb33ffe3c3cc1e64"
+      "pin": "94ee82030e4db89b878395a09caebdf268caac13"
     },
     {
       "name": "cofiswarm-adapter-agentic",
@@ -318,11 +318,11 @@
       "status": "archived"
     }
   ],
-  "release": "v1.2.0",
+  "release": "v1.2.1",
   "cutover": "v3.0.0-bridge",
   "monorepo_tag": "v3.0.0-bridge",
   "pins": {
-    "cofiswarm-deploy": "16ba977cbdb44582886f1ecdf3af08bd52c14b88",
+    "cofiswarm-deploy": "930e842a1ea54de205d38bb730c1ea1dfc9dff82",
     "cofiswarm-common": "1ba12b44bac5e398711a385a796e48b452a28643",
     "cofiswarm-docs": "c786ab153805ff3963d7456e4c71cee786f3dd7b",
     "cofiswarm-gateway": "79538f7fbda85848f8ae217d06e28cbdf0528205",
@@ -331,16 +331,16 @@
     "cofiswarm-coordinator": "dd65519b13e6960e8518e7f142c0153f56ad2c36",
     "cofiswarm-proxy": "a3dd5f5c5856a0046e90e0936bb4597404e7c997",
     "cofiswarm-config": "85680f3111ae639c2b5cb23f5bb2288c53ea1fbe",
-    "cofiswarm-launcher": "1343b2895e0b654d0e9c2692874d75e5b1d7c21c",
+    "cofiswarm-launcher": "3fd71c94aa62a558dc54a3cc534e09c0d340e7a7",
     "cofiswarm-agent-registry": "9bbcbbab777f8786a92ec7b48a50fe8ae40c2880",
     "cofiswarm-infer-llama": "af3925e54df1b3514fea2c07ccab7bd02490d89e",
-    "cofiswarm-infer-mlx": "4a92cd17e4798e8b9c00e457b6685b83607520df",
-    "cofiswarm-orchestrate": "0f48d3b8fe42961141616c482bfac006aa30ed1f",
+    "cofiswarm-infer-mlx": "8149eb264b0f71924eb6728739d6deaf54fb92cf",
+    "cofiswarm-orchestrate": "4a339c8a69c8dc88b1f5f3d5c97cf2e1a00690b8",
     "cofiswarm-rag": "3eae1aaad287b9d0cf1c72b174f3b5a8bb63a7e5",
     "cofiswarm-matrix-config": "6aeecb555fb98c064b3bea9c13d80ba830cddfc7",
-    "cofiswarm-backend-sdk": "aab588ad0e39e0a10baec3b23eb35d24e9aa1b77",
-    "cofiswarm-backend-llama": "bd1ab6962ef0bcd40b3a65fce60d96be0ad790b0",
-    "cofiswarm-backend-mlx": "a5b9016065f045a7245516f94941f16a5db5c7eb",
+    "cofiswarm-backend-sdk": "c15534ca8153cf4f51ff998de21f29a3858f14b4",
+    "cofiswarm-backend-llama": "c873c22530ff34bafbc7776f3d25ae944cd7d341",
+    "cofiswarm-backend-mlx": "6a4197b9790a35a49118e2e80512db883b1080f0",
     "cofiswarm-models": "199834b9aef74eb450c67b727a06fa7091c83b11",
     "cofiswarm-slot-manager": "d4411cfecee837ba782a7500355862a3099ba60b",
     "cofiswarm-kvpool": "0990647caf618c9317f6ed64855fdb6a764fc9ed",
@@ -362,7 +362,7 @@
     "cofiswarm-infer-ollama": "786b1a36583151ea24aa38f3c8544277b3e5c725",
     "cofiswarm-backend-vllm": "e3e9a89cce2ac151f5215870ad1f08ceaba02693",
     "cofiswarm-adapter-openai-compat": "dd4058304153c0b6abf53cfcf277dbdda10a3756",
-    "cofiswarm-tools": "184bfbf64742e7c8fa5b2cb0eb33ffe3c3cc1e64",
+    "cofiswarm-tools": "94ee82030e4db89b878395a09caebdf268caac13",
     "cofiswarm-adapter-agentic": "5e6e7e0787c57e88a337d5586b0f2cf72d2afb5e",
     "cofiswarm-grafana": "ec1b277b1c903152343ef14f8d09c34d7c2956ec",
     "cofiswarm-pgvector": "88f9ddda521d9aaf9fb71644d31a7aabbe77f766"
