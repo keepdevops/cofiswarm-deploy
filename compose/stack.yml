@@ -45,19 +45,16 @@ services:
     # so intra-stack DNS and COFISWARM_BRIDGE_URL wiring are unaffected.
     container_name: cofiswarm-stack-observer
     restart: unless-stopped
-    # root so the mounted Docker socket is readable (the Docker-stats widget). Local dev only —
-    # the observer otherwise needs no privilege; drop this (and the socket mount) to disable it.
-    user: "0:0"
     environment:
       COFISWARM_ZMQ_EGRESS_ADDR: tcp://zmq-bridge:5557 # subscribe to carrier egress
       COFISWARM_BRIDGE_URL: http://zmq-bridge:5555      # presence republish + SSE fallback
+      # Docker-stats widget reads through the read-only socket proxy (no raw socket / root here).
+      COFISWARM_DOCKER_HOST: http://docker-socket-proxy:2375
     volumes:
       # Observer plugins are repo-sourced (their canonical home; render-config.sh used to copy
       # these into FHS). Agent-log output goes to a Docker-managed named volume — no FHS.
       - ${COFISWARM_REPOS_ROOT}/cofiswarm-observer/plugins:/var/lib/cofiswarm/observer/plugins:ro
       - cofiswarm-observer-logs:/var/log/cofiswarm
-      # read-only Docker socket — powers the dashboard's per-container Docker stats widget
-      - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
       - "8016:8016"
     extra_hosts:
@@ -65,11 +62,26 @@ services:
     depends_on:
       zmq-bridge:
         condition: service_healthy
+      docker-socket-proxy:
+        condition: service_started
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8016/healthz"]
       interval: 10s
       timeout: 5s
       retries: 6
+
+  # Hardened read-only Docker API proxy: the ONLY thing that touches the raw socket. It
+  # exposes just GET /containers/* (CONTAINERS=1) with all writes blocked (POST=0), so the
+  # observer reads per-container stats over TCP :2375 without a socket mount or root.
+  docker-socket-proxy:
+    image: tecnativa/docker-socket-proxy:latest
+    container_name: cofiswarm-docker-proxy
+    restart: unless-stopped
+    environment:
+      CONTAINERS: "1"   # GET /containers/json + /containers/{id}/stats (read only)
+      POST: "0"         # block create/start/stop/exec/etc.
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
   # WebSocket gateway for the Observer Panel: bridges browser dashboards (full-duplex
   # ws://) to the carrier — SUBs the egress :5557 for events, PUBs commands to the ingress
