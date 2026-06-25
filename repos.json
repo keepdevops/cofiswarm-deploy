@@ -8,28 +8,28 @@
       "role": "meta",
       "phase": 0,
       "required": true,
-      "pin": "03bb011a4b05b50990d281ae5ba9885dc659962b"
+      "pin": "16ba977cbdb44582886f1ecdf3af08bd52c14b88"
     },
     {
       "name": "cofiswarm-common",
       "role": "contract",
       "phase": 0,
       "required": true,
-      "pin": "127b3056cae5d0dbd6f48d91ea08b51ac94cbce7"
+      "pin": "1ba12b44bac5e398711a385a796e48b452a28643"
     },
     {
       "name": "cofiswarm-docs",
       "role": "docs",
       "phase": 0,
       "required": false,
-      "pin": "a0af7a8440d4277eed071f137ab2a96b4342c3ed"
+      "pin": "c786ab153805ff3963d7456e4c71cee786f3dd7b"
     },
     {
       "name": "cofiswarm-gateway",
       "role": "edge",
       "phase": 1,
       "required": false,
-      "pin": "65a1e779384c6001833f68c474ae92094a06b2ba",
+      "pin": "79538f7fbda85848f8ae217d06e28cbdf0528205",
       "status": "archived"
     },
     {
@@ -37,14 +37,14 @@
       "role": "ui",
       "phase": 1,
       "required": true,
-      "pin": "918d056ff4b8eb7261a2d467b6c6068e85a00607"
+      "pin": "e6a7c4bfa49ac1376ed9914f42319e8bdb76df14"
     },
     {
       "name": "cofiswarm-stream-sdk",
       "role": "contract",
       "phase": 1,
       "required": true,
-      "pin": "e0438f83d5d7394b80f13c833ce1277ecf463e48"
+      "pin": "bcdc3b357095a36baee9a2501b23e2ff1e72b751"
     },
     {
       "name": "cofiswarm-coordinator",
@@ -52,7 +52,7 @@
       "phase": 1,
       "required": false,
       "retire_phase": 5,
-      "pin": "9cd4be157f0653f954a6756a9e7023d70c3b8444",
+      "pin": "dd65519b13e6960e8518e7f142c0153f56ad2c36",
       "status": "archived"
     },
     {
@@ -61,7 +61,7 @@
       "phase": 1,
       "required": false,
       "retire_phase": 4,
-      "pin": "1a28c947b68be9ea74d48e4b03496eaf471487ae",
+      "pin": "a3dd5f5c5856a0046e90e0936bb4597404e7c997",
       "status": "archived"
     },
     {
@@ -69,77 +69,77 @@
       "role": "config",
       "phase": 0,
       "required": true,
-      "pin": "d2d38fdcdee3c1fa23706b02053154352abf3c3c"
+      "pin": "85680f3111ae639c2b5cb23f5bb2288c53ea1fbe"
     },
     {
       "name": "cofiswarm-launcher",
       "role": "control",
       "phase": 2,
       "required": true,
-      "pin": "d8722392ef28188d1eb16d096ff86c2d1ee1b9b4"
+      "pin": "1343b2895e0b654d0e9c2692874d75e5b1d7c21c"
     },
     {
       "name": "cofiswarm-agent-registry",
       "role": "agents",
       "phase": 2,
       "required": true,
-      "pin": "c04a797234e02aa81b4128e81a1635827692d068"
+      "pin": "9bbcbbab777f8786a92ec7b48a50fe8ae40c2880"
     },
     {
       "name": "cofiswarm-infer-llama",
       "role": "infer",
       "phase": 2,
       "required": true,
-      "pin": "21574b2a716240c7f20f97534f88091c90d4fe0e"
+      "pin": "af3925e54df1b3514fea2c07ccab7bd02490d89e"
     },
     {
       "name": "cofiswarm-infer-mlx",
       "role": "infer",
       "phase": 2,
       "required": true,
-      "pin": "711c32eb0a45cfae3826767f4c4d134bd1a81260"
+      "pin": "4a92cd17e4798e8b9c00e457b6685b83607520df"
     },
     {
       "name": "cofiswarm-orchestrate",
       "role": "sidecar",
       "phase": 2,
       "required": true,
-      "pin": "e1f898c10a6d22c76e8a6e08076aa4b04e001c77"
+      "pin": "0f48d3b8fe42961141616c482bfac006aa30ed1f"
     },
     {
       "name": "cofiswarm-rag",
       "role": "sidecar",
       "phase": 2,
       "required": true,
-      "pin": "c7a333cb6049d01abad2b3e7a1ae26813f4700bc"
+      "pin": "3eae1aaad287b9d0cf1c72b174f3b5a8bb63a7e5"
     },
     {
       "name": "cofiswarm-matrix-config",
       "role": "sidecar",
       "phase": 2,
       "required": true,
-      "pin": "f8a71dc11e21f56b4b4d5a8b2c6953c73b789e44"
+      "pin": "6aeecb555fb98c064b3bea9c13d80ba830cddfc7"
     },
     {
       "name": "cofiswarm-backend-sdk",
       "role": "sdk",
       "phase": 2,
       "required": true,
-      "pin": "7362cb8f61df4648b8e6fe0aae065e7224667238"
+      "pin": "aab588ad0e39e0a10baec3b23eb35d24e9aa1b77"
     },
     {
       "name": "cofiswarm-backend-llama",
       "role": "backend",
       "phase": 2,
       "required": true,
-      "pin": "024377f82c38d5b5e5fdcc5f1ecac47c1343789e"
+      "pin": "bd1ab6962ef0bcd40b3a65fce60d96be0ad790b0"
     },
     {
       "name": "cofiswarm-backend-mlx",
       "role": "backend",
       "phase": 2,
       "required": true,
-      "pin": "e40bf615886598afcec89b64e3f7f5dae395dc97"
+      "pin": "a5b9016065f045a7245516f94941f16a5db5c7eb"
     },
     {
       "name": "cofiswarm-models",
@@ -153,21 +153,21 @@
       "role": "control",
       "phase": 3,
       "required": true,
-      "pin": "bad532da3d832c536e71304226a1d8ad432ae1b5"
+      "pin": "d4411cfecee837ba782a7500355862a3099ba60b"
     },
     {
       "name": "cofiswarm-kvpool",
       "role": "control",
       "phase": 3,
       "required": true,
-      "pin": "3a890f0f84190be856c1a8f3ea1c8949a53d6934"
+      "pin": "0990647caf618c9317f6ed64855fdb6a764fc9ed"
     },
     {
       "name": "cofiswarm-observer",
       "role": "observe",
       "phase": 3,
       "required": true,
-      "pin": "5b041b2e7a7aef7affe6c2b7fa663cca2463ccdc"
+      "pin": "daa1f9325f00d9fe6ad56db888494ec612c2c476"
     },
     {
       "name": "cofiswarm-observer-gateway",
@@ -181,126 +181,126 @@
       "role": "sdk",
       "phase": 3,
       "required": true,
-      "pin": "390b99faa5cef48c978d810fff8a3311af5be95c"
+      "pin": "353b75e125cc76e6a3e003fd529c4956533aa108"
     },
     {
       "name": "cofiswarm-zmq-bridge",
       "role": "bus",
       "phase": 3,
       "required": true,
-      "pin": "a4cbf6cb8f6fb3f4074bf541a8df25825ac9fc98"
+      "pin": "e2969e22b9051ce792eaef0da23dc37d56385304"
     },
     {
       "name": "cofiswarm-rag-worker",
       "role": "job",
       "phase": 3,
       "required": true,
-      "pin": "86c5e478ee25fa045d52a2fec91ff79a382c5249"
+      "pin": "e2e389128fa626bfbf0950d1fd17be0592803ac5"
     },
     {
       "name": "cofiswarm-e2e",
       "role": "quality",
       "phase": 3,
       "required": true,
-      "pin": "5fc34f744f14d59f51d2c311bce9909b3ca2343c"
+      "pin": "f9f02ad8060343c5a8699d7ddf9224a9fe16e64a"
     },
     {
       "name": "cofiswarm-dispatch",
       "role": "dispatch",
       "phase": 4,
       "required": true,
-      "pin": "a69818189feec7e1ee810c10ea3246d6426e017f"
+      "pin": "e68c6ccd1cc529674b2f1215808814f5e693459a"
     },
     {
       "name": "cofiswarm-mode-sdk",
       "role": "sdk",
       "phase": 4,
       "required": true,
-      "pin": "4cea638eba05bd3500d52059a9fa9639d3f00b77"
+      "pin": "fd3af9bd1a742ad2b30922dbff3e76603f901b2b"
     },
     {
       "name": "cofiswarm-convert",
       "role": "job",
       "phase": 4,
       "required": true,
-      "pin": "eae4b9a222220b7ff05eed64f69c11f535619ae6"
+      "pin": "ab482e77f77b1cb4e13485e95b7535210fa42331"
     },
     {
       "name": "cofiswarm-mode-flat",
       "role": "mode",
       "phase": 5,
       "required": true,
-      "pin": "e2658c1b1f0c9190122a0cee933d3e8874a6838f"
+      "pin": "9569dfc07b30f5ef3bb1d5298ea58a202d379686"
     },
     {
       "name": "cofiswarm-mode-pipeline",
       "role": "mode",
       "phase": 5,
       "required": true,
-      "pin": "eb6a2af077ef1e4527d4395a4244d5a6efb312da"
+      "pin": "1a3c7b4030e5175192b6ebe529ccc68f9ddb6adb"
     },
     {
       "name": "cofiswarm-mode-cascade",
       "role": "mode",
       "phase": 5,
       "required": true,
-      "pin": "6039934f45dceae59f2e0628a1e97d2a6fed4010"
+      "pin": "d3c8906f07d2d4f9bb45353a3389d3a743cd1568"
     },
     {
       "name": "cofiswarm-mode-router",
       "role": "mode",
       "phase": 5,
       "required": true,
-      "pin": "68805b670c2fdd11ecec04b9d6c6ec2ea55c1f31"
+      "pin": "2364bbfb02245b253bd3434db37f2f3003301518"
     },
     {
       "name": "cofiswarm-infer-vllm",
       "role": "infer",
       "phase": 6,
       "required": false,
-      "pin": "df59c61c56a9277a136e29a158b2749753eb9bb2"
+      "pin": "84f87730e9cd4ff1efbbbf9856ad7e483525593c"
     },
     {
       "name": "cofiswarm-infer-sglang",
       "role": "infer",
       "phase": 6,
       "required": false,
-      "pin": "bbc29186209a410228e9aaf7a00def22e4710463"
+      "pin": "90a2c7a1ae093b64cc633c68c56d041917531c61"
     },
     {
       "name": "cofiswarm-infer-ollama",
       "role": "infer",
       "phase": 6,
       "required": false,
-      "pin": "64e48ed3f1c558b597cf28b3b1ecc213b6c7f86c"
+      "pin": "786b1a36583151ea24aa38f3c8544277b3e5c725"
     },
     {
       "name": "cofiswarm-backend-vllm",
       "role": "backend",
       "phase": 6,
       "required": false,
-      "pin": "365a770d901ed585a43dde36cf80a99fa6afe279"
+      "pin": "e3e9a89cce2ac151f5215870ad1f08ceaba02693"
     },
     {
       "name": "cofiswarm-adapter-openai-compat",
       "role": "adapter",
       "phase": 6,
       "required": false,
-      "pin": "14098306fb1329acc94f55c5f2d8dadbbfd35c62"
+      "pin": "dd4058304153c0b6abf53cfcf277dbdda10a3756"
     },
     {
       "name": "cofiswarm-tools",
       "role": "sidecar",
       "phase": 6,
       "required": false,
-      "pin": "9995c979c16b8866e8ba20bd4a66ae96134a59c4"
+      "pin": "184bfbf64742e7c8fa5b2cb0eb33ffe3c3cc1e64"
     },
     {
       "name": "cofiswarm-adapter-agentic",
       "role": "adapter",
       "phase": 7,
       "required": false,
-      "pin": "b6a6d2c8b33ac2b81d460eba31dca42493e07695"
+      "pin": "5e6e7e0787c57e88a337d5586b0f2cf72d2afb5e"
     },
     {
       "name": "cofiswarm-grafana",
@@ -314,7 +314,7 @@
       "role": "infra",
       "phase": 2,
       "required": false,
-      "pin": "4b65ed43227d8762b2f1960cf21e3b3cd5af9e51",
+      "pin": "88f9ddda521d9aaf9fb71644d31a7aabbe77f766",
       "status": "archived"
     }
   ],
@@ -322,50 +322,50 @@
   "cutover": "v3.0.0-bridge",
   "monorepo_tag": "v3.0.0-bridge",
   "pins": {
-    "cofiswarm-deploy": "03bb011a4b05b50990d281ae5ba9885dc659962b",
-    "cofiswarm-common": "127b3056cae5d0dbd6f48d91ea08b51ac94cbce7",
-    "cofiswarm-docs": "a0af7a8440d4277eed071f137ab2a96b4342c3ed",
-    "cofiswarm-gateway": "65a1e779384c6001833f68c474ae92094a06b2ba",
-    "cofiswarm-ui": "918d056ff4b8eb7261a2d467b6c6068e85a00607",
-    "cofiswarm-stream-sdk": "e0438f83d5d7394b80f13c833ce1277ecf463e48",
-    "cofiswarm-coordinator": "9cd4be157f0653f954a6756a9e7023d70c3b8444",
-    "cofiswarm-proxy": "1a28c947b68be9ea74d48e4b03496eaf471487ae",
-    "cofiswarm-config": "d2d38fdcdee3c1fa23706b02053154352abf3c3c",
-    "cofiswarm-launcher": "d8722392ef28188d1eb16d096ff86c2d1ee1b9b4",
-    "cofiswarm-agent-registry": "c04a797234e02aa81b4128e81a1635827692d068",
-    "cofiswarm-infer-llama": "21574b2a716240c7f20f97534f88091c90d4fe0e",
-    "cofiswarm-infer-mlx": "711c32eb0a45cfae3826767f4c4d134bd1a81260",
-    "cofiswarm-orchestrate": "e1f898c10a6d22c76e8a6e08076aa4b04e001c77",
-    "cofiswarm-rag": "c7a333cb6049d01abad2b3e7a1ae26813f4700bc",
-    "cofiswarm-matrix-config": "f8a71dc11e21f56b4b4d5a8b2c6953c73b789e44",
-    "cofiswarm-backend-sdk": "7362cb8f61df4648b8e6fe0aae065e7224667238",
-    "cofiswarm-backend-llama": "024377f82c38d5b5e5fdcc5f1ecac47c1343789e",
-    "cofiswarm-backend-mlx": "e40bf615886598afcec89b64e3f7f5dae395dc97",
+    "cofiswarm-deploy": "16ba977cbdb44582886f1ecdf3af08bd52c14b88",
+    "cofiswarm-common": "1ba12b44bac5e398711a385a796e48b452a28643",
+    "cofiswarm-docs": "c786ab153805ff3963d7456e4c71cee786f3dd7b",
+    "cofiswarm-gateway": "79538f7fbda85848f8ae217d06e28cbdf0528205",
+    "cofiswarm-ui": "e6a7c4bfa49ac1376ed9914f42319e8bdb76df14",
+    "cofiswarm-stream-sdk": "bcdc3b357095a36baee9a2501b23e2ff1e72b751",
+    "cofiswarm-coordinator": "dd65519b13e6960e8518e7f142c0153f56ad2c36",
+    "cofiswarm-proxy": "a3dd5f5c5856a0046e90e0936bb4597404e7c997",
+    "cofiswarm-config": "85680f3111ae639c2b5cb23f5bb2288c53ea1fbe",
+    "cofiswarm-launcher": "1343b2895e0b654d0e9c2692874d75e5b1d7c21c",
+    "cofiswarm-agent-registry": "9bbcbbab777f8786a92ec7b48a50fe8ae40c2880",
+    "cofiswarm-infer-llama": "af3925e54df1b3514fea2c07ccab7bd02490d89e",
+    "cofiswarm-infer-mlx": "4a92cd17e4798e8b9c00e457b6685b83607520df",
+    "cofiswarm-orchestrate": "0f48d3b8fe42961141616c482bfac006aa30ed1f",
+    "cofiswarm-rag": "3eae1aaad287b9d0cf1c72b174f3b5a8bb63a7e5",
+    "cofiswarm-matrix-config": "6aeecb555fb98c064b3bea9c13d80ba830cddfc7",
+    "cofiswarm-backend-sdk": "aab588ad0e39e0a10baec3b23eb35d24e9aa1b77",
+    "cofiswarm-backend-llama": "bd1ab6962ef0bcd40b3a65fce60d96be0ad790b0",
+    "cofiswarm-backend-mlx": "a5b9016065f045a7245516f94941f16a5db5c7eb",
     "cofiswarm-models": "199834b9aef74eb450c67b727a06fa7091c83b11",
-    "cofiswarm-slot-manager": "bad532da3d832c536e71304226a1d8ad432ae1b5",
-    "cofiswarm-kvpool": "3a890f0f84190be856c1a8f3ea1c8949a53d6934",
-    "cofiswarm-observer": "5b041b2e7a7aef7affe6c2b7fa663cca2463ccdc",
+    "cofiswarm-slot-manager": "d4411cfecee837ba782a7500355862a3099ba60b",
+    "cofiswarm-kvpool": "0990647caf618c9317f6ed64855fdb6a764fc9ed",
+    "cofiswarm-observer": "daa1f9325f00d9fe6ad56db888494ec612c2c476",
     "cofiswarm-observer-gateway": "d2fa2b813e4b39a37b687b07064a46ea22270f2d",
-    "cofiswarm-observer-sdk": "390b99faa5cef48c978d810fff8a3311af5be95c",
-    "cofiswarm-zmq-bridge": "a4cbf6cb8f6fb3f4074bf541a8df25825ac9fc98",
-    "cofiswarm-rag-worker": "86c5e478ee25fa045d52a2fec91ff79a382c5249",
-    "cofiswarm-e2e": "5fc34f744f14d59f51d2c311bce9909b3ca2343c",
-    "cofiswarm-dispatch": "a69818189feec7e1ee810c10ea3246d6426e017f",
-    "cofiswarm-mode-sdk": "4cea638eba05bd3500d52059a9fa9639d3f00b77",
-    "cofiswarm-convert": "eae4b9a222220b7ff05eed64f69c11f535619ae6",
-    "cofiswarm-mode-flat": "e2658c1b1f0c9190122a0cee933d3e8874a6838f",
-    "cofiswarm-mode-pipeline": "eb6a2af077ef1e4527d4395a4244d5a6efb312da",
-    "cofiswarm-mode-cascade": "6039934f45dceae59f2e0628a1e97d2a6fed4010",
-    "cofiswarm-mode-router": "68805b670c2fdd11ecec04b9d6c6ec2ea55c1f31",
-    "cofiswarm-infer-vllm": "df59c61c56a9277a136e29a158b2749753eb9bb2",
-    "cofiswarm-infer-sglang": "bbc29186209a410228e9aaf7a00def22e4710463",
-    "cofiswarm-infer-ollama": "64e48ed3f1c558b597cf28b3b1ecc213b6c7f86c",
-    "cofiswarm-backend-vllm": "365a770d901ed585a43dde36cf80a99fa6afe279",
-    "cofiswarm-adapter-openai-compat": "14098306fb1329acc94f55c5f2d8dadbbfd35c62",
-    "cofiswarm-tools": "9995c979c16b8866e8ba20bd4a66ae96134a59c4",
-    "cofiswarm-adapter-agentic": "b6a6d2c8b33ac2b81d460eba31dca42493e07695",
+    "cofiswarm-observer-sdk": "353b75e125cc76e6a3e003fd529c4956533aa108",
+    "cofiswarm-zmq-bridge": "e2969e22b9051ce792eaef0da23dc37d56385304",
+    "cofiswarm-rag-worker": "e2e389128fa626bfbf0950d1fd17be0592803ac5",
+    "cofiswarm-e2e": "f9f02ad8060343c5a8699d7ddf9224a9fe16e64a",
+    "cofiswarm-dispatch": "e68c6ccd1cc529674b2f1215808814f5e693459a",
+    "cofiswarm-mode-sdk": "fd3af9bd1a742ad2b30922dbff3e76603f901b2b",
+    "cofiswarm-convert": "ab482e77f77b1cb4e13485e95b7535210fa42331",
+    "cofiswarm-mode-flat": "9569dfc07b30f5ef3bb1d5298ea58a202d379686",
+    "cofiswarm-mode-pipeline": "1a3c7b4030e5175192b6ebe529ccc68f9ddb6adb",
+    "cofiswarm-mode-cascade": "d3c8906f07d2d4f9bb45353a3389d3a743cd1568",
+    "cofiswarm-mode-router": "2364bbfb02245b253bd3434db37f2f3003301518",
+    "cofiswarm-infer-vllm": "84f87730e9cd4ff1efbbbf9856ad7e483525593c",
+    "cofiswarm-infer-sglang": "90a2c7a1ae093b64cc633c68c56d041917531c61",
+    "cofiswarm-infer-ollama": "786b1a36583151ea24aa38f3c8544277b3e5c725",
+    "cofiswarm-backend-vllm": "e3e9a89cce2ac151f5215870ad1f08ceaba02693",
+    "cofiswarm-adapter-openai-compat": "dd4058304153c0b6abf53cfcf277dbdda10a3756",
+    "cofiswarm-tools": "184bfbf64742e7c8fa5b2cb0eb33ffe3c3cc1e64",
+    "cofiswarm-adapter-agentic": "5e6e7e0787c57e88a337d5586b0f2cf72d2afb5e",
     "cofiswarm-grafana": "ec1b277b1c903152343ef14f8d09c34d7c2956ec",
-    "cofiswarm-pgvector": "4b65ed43227d8762b2f1960cf21e3b3cd5af9e51"
+    "cofiswarm-pgvector": "88f9ddda521d9aaf9fb71644d31a7aabbe77f766"
   },
   "migration_signoff": "v1.1.0",
   "observability_signoff": "v1.1.0",
