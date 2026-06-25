@@ -170,6 +170,13 @@
       "pin": "5b041b2e7a7aef7affe6c2b7fa663cca2463ccdc"
     },
     {
+      "name": "cofiswarm-observer-gateway",
+      "role": "observe",
+      "phase": 3,
+      "required": true,
+      "pin": "d2fa2b813e4b39a37b687b07064a46ea22270f2d"
+    },
+    {
       "name": "cofiswarm-observer-sdk",
       "role": "sdk",
       "phase": 3,
@@ -338,6 +345,7 @@
     "cofiswarm-slot-manager": "bad532da3d832c536e71304226a1d8ad432ae1b5",
     "cofiswarm-kvpool": "3a890f0f84190be856c1a8f3ea1c8949a53d6934",
     "cofiswarm-observer": "5b041b2e7a7aef7affe6c2b7fa663cca2463ccdc",
+    "cofiswarm-observer-gateway": "d2fa2b813e4b39a37b687b07064a46ea22270f2d",
     "cofiswarm-observer-sdk": "390b99faa5cef48c978d810fff8a3311af5be95c",
     "cofiswarm-zmq-bridge": "a4cbf6cb8f6fb3f4074bf541a8df25825ac9fc98",
     "cofiswarm-rag-worker": "86c5e478ee25fa045d52a2fec91ff79a382c5249",

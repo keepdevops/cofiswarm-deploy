@@ -20,7 +20,7 @@ for r in doc.get("repos") or []:
     path = repos / name
     if (path / "go.mod").is_file() and name != sdk:
         go_mods.append(name)
-lines = ["go 1.22", ""]
+lines = ["go 1.25.0", ""]
 for name in sorted(go_mods):
     lines.append(f"use ./{name}")
 lines.append("")
