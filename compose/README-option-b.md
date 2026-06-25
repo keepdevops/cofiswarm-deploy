@@ -22,19 +22,16 @@ docker compose -f docker-compose.yml -f "$OV" up -d \
   `extra_hosts: host.docker.internal:host-gateway`.
 - **slot-manager** — `ports: !reset []` (internal-only; host 8013 is taken).
 
-## Mode binaries (`mode-bins/`, git-ignored)
+## Mode images
 
-The mode repos pin `cofiswarm-mode-sdk v0.1.0`, which predates `infer_host`/`swarm_config_path`.
-Until a newer mode-sdk tag is published and the mode repos are bumped, build the modes against
-the local SDK (the repo `go.work` has the `replace`) and bind-mount the static binaries:
+`cofiswarm-mode-sdk v1.2.3` (which adds `infer_host`/`swarm_config_path` + the `/v1/models`
+health probe) is published, and all four mode repos are bumped to it. So the modes build
+normally from their `go.mod` — just `docker compose build mode-flat mode-pipeline mode-cascade
+mode-router`; no `go.work` replace or bind-mounted binaries required.
 
-```sh
-cd ../../   # repos root (go.work)
-for m in flat pipeline cascade router; do
-  (cd cofiswarm-mode-$m && GOOS=linux GOARCH=arm64 CGO_ENABLED=0 \
-     go build -trimpath -o ../cofiswarm-deploy/compose/mode-bins/cofiswarm-mode-$m ./cmd/cofiswarm-mode-$m)
-done
-```
+> Legacy: before v1.2.3 was published the modes were cross-built against the local SDK and
+> bind-mounted over `/usr/local/bin/cofiswarm-mode-<n>` (artifacts in the git-ignored
+> `mode-bins/`). That stopgap is gone — the override no longer mounts binaries.
 
 ## Host inference servers
 
