@@ -96,6 +96,7 @@ services:
     environment:
       COFISWARM_ZMQ_EGRESS_ADDR: tcp://zmq-bridge:5557 # events in (SUB)
       COFISWARM_ZMQ_ADDR: tcp://zmq-bridge:5556         # commands out (PUB to ingress)
+      COFISWARM_BRIDGE_URL: http://zmq-bridge:5555      # announce own presence to the observer
     ports:
       - "8820:8820"
     depends_on:
