@@ -129,6 +129,8 @@ start_svc() {
   local -a run_env=()
   if [[ "$name" == mode-* ]]; then
     run_env=(env "COFISWARM_SWARM_CONFIG=${COFISWARM_SWARM_CONFIG:-}")
+  elif [[ -n "${SVC_ENV+x}" ]] && ((${#SVC_ENV[@]} > 0)); then
+    run_env=(env "${SVC_ENV[@]}")  # per-service env set by the caller (cleared after)
   fi
   if ((${#run_env[@]} > 0)); then
     nohup "${run_env[@]}" "$bin" "$@" >>"${LOGDIR}/${name}.log" 2>&1 &
@@ -187,11 +189,20 @@ start_svc slot-manager "${REPOS}/cofiswarm-slot-manager/bin/cofiswarm-slot-manag
 start_svc kvpool "${REPOS}/cofiswarm-kvpool/bin/cofiswarm-kvpool"
 start_svc configure "${REPOS}/cofiswarm-launcher/bin/cofiswarm-configure" -listen :8017
 wait_port 8017 configure || true
-start_svc observer "${REPOS}/cofiswarm-observer/bin/cofiswarm-observer" -listen :8016
-start_svc convert "${REPOS}/cofiswarm-convert/bin/cofiswarm-convert" -listen :8015
-wait_port 8015 convert || true
+# ZMQ carrier first (parity with compose/stack.yml). Without COFISWARM_BUS=zmq the bridge
+# falls back to the in-process mem bus and the ZMQ wire stays idle: ingress SUB binds :5556,
+# egress PUB binds :5557 for the observer to subscribe.
+SVC_ENV=(COFISWARM_BUS=zmq "COFISWARM_ZMQ_ADDR=tcp://*:5556" "COFISWARM_ZMQ_EGRESS_ADDR=tcp://*:5557")
 start_svc zmq-bridge "${REPOS}/cofiswarm-zmq-bridge/bin/cofiswarm-zmq-bridge" \
   -topics "${REPOS}/cofiswarm-zmq-bridge/spec/topics.yaml"
+SVC_ENV=()
+# observer subscribes to the carrier egress (:5557) for the live view; the bridge URL
+# carries presence republish + SSE fallback.
+SVC_ENV=(COFISWARM_ZMQ_EGRESS_ADDR=tcp://127.0.0.1:5557 COFISWARM_BRIDGE_URL=http://127.0.0.1:5555)
+start_svc observer "${REPOS}/cofiswarm-observer/bin/cofiswarm-observer" -listen :8016
+SVC_ENV=()
+start_svc convert "${REPOS}/cofiswarm-convert/bin/cofiswarm-convert" -listen :8015
+wait_port 8015 convert || true
 for spec in \
   "mode-flat:${COFISWARM_MODE_FLAT_PORT}" \
   "mode-pipeline:${COFISWARM_MODE_PIPELINE_PORT}" \
