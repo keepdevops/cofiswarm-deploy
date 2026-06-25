@@ -15,6 +15,7 @@ BASE="${COFISWARM_VAR_LIB:-$HOME/.local/share/cofiswarm}"
 LOGDIR="${COFISWARM_INFER_LOGDIR:-$HOME/Library/Logs/cofiswarm}"
 BRIDGE="${COFISWARM_BRIDGE_URL:-http://127.0.0.1:5555}"
 NOMIC_URL="${NOMIC_EMBED_URL:-http://127.0.0.1:8090/v1/embeddings}"
+WATCH="${COFISWARM_RAG_WATCH_DIR:-$REPOS/cofiswarm-docs}"   # auto-indexed docs dir
 mkdir -p "$BIN_DIR" "$BASE/rag/index/queue" "$LOGDIR"
 
 bound() { lsof -nP -iTCP:"$1" -sTCP:LISTEN >/dev/null 2>&1; }
@@ -52,6 +53,7 @@ fi
 if bound 8018; then echo "ok: rag-worker :8018 already bound"
 else
   COFISWARM_VAR_LIB="$BASE" COFISWARM_BRIDGE_URL="$BRIDGE" \
+    RAG_WATCH_DIR="$WATCH" RAG_INGEST_URL="http://127.0.0.1:8001" \
     nohup "$BIN_DIR/cofiswarm-rag-worker" -listen :8018 >>"$LOGDIR/rag-worker-8018.log" 2>&1 &
   echo "started: rag-worker :8018 pid $!"
 fi
