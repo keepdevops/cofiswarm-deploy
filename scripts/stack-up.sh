@@ -220,19 +220,12 @@ for spec in \
   wait_port "$port" "$role" || true
 done
 
-start_py_svc rag env \
-  COFISWARM_COORDINATOR_CONFIG="${COFISWARM_COORDINATOR_CONFIG}" \
-  RAG_STORE="${RAG_STORE}" \
-  RAG_SQLITE_PATH="${RAG_SQLITE_PATH}" \
-  RAG_INGEST_HOST=0.0.0.0 \
-  PYTHONPATH="${REPOS}/cofiswarm-rag/src" \
-  python3 "${REPOS}/cofiswarm-rag/scripts/ingest-server.py"
+# rag + rag-worker are Go now (RAG_STORE / RAG_SQLITE_PATH exported above; the worker
+# reads COFISWARM_VAR_LIB for the FHS index queue).
+export COFISWARM_VAR_LIB="${COFISWARM_VAR_LIB:-${FHS}/var/lib/cofiswarm}"
+start_svc rag "${REPOS}/cofiswarm-rag/bin/cofiswarm-rag" -host 0.0.0.0 -port 8001
 wait_port 8001 rag || true
-start_py_svc rag-worker env \
-  COFISWARM_VAR_LIB="${FHS}/var/lib/cofiswarm" \
-  RAG_WORKER_PORT=8018 \
-  PYTHONPATH="${REPOS}/cofiswarm-rag-worker/src" \
-  python3 "${REPOS}/cofiswarm-rag-worker/scripts/run-worker.py"
+start_svc rag-worker "${REPOS}/cofiswarm-rag-worker/bin/cofiswarm-rag-worker" -listen :8018
 wait_port 8018 rag-worker || true
 start_py_svc orchestrate env \
   COFISWARM_CONFIG_ROOT="${FHS}/etc/cofiswarm/config" \
