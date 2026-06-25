@@ -1,31 +1,28 @@
 #!/usr/bin/env bash
-# Sprint 42: verify installed LaunchAgent is loaded (optional unless LAUNCHD_REQUIRE=1).
+# Verify the installed host-side LaunchAgents are loaded (optional unless LAUNCHD_REQUIRE=1).
+# Supersedes the retired stack-up agent; checks host-inference + announcer.
 set -euo pipefail
-LABEL="com.cofiswarm.stack-up"
-PLIST="${HOME}/Library/LaunchAgents/${LABEL}.plist"
 DOMAIN="gui/$(id -u)"
+REQUIRE="${LAUNCHD_REQUIRE:-}"
 
-if [[ ! -f "$PLIST" ]]; then
-  if [[ "${LAUNCHD_REQUIRE:-}" == "1" ]]; then
-    echo "fail: ${PLIST} missing (run make install-launchd)" >&2
-    exit 1
+check_live() { # label expect-invocation-substr
+  local label="$1" want="$2"
+  local plist="${HOME}/Library/LaunchAgents/${label}.plist"
+  if [[ ! -f "$plist" ]]; then
+    if [[ "$REQUIRE" == "1" ]]; then echo "fail: ${plist} missing (run make install-launchd)" >&2; exit 1; fi
+    echo "ok: ${label} live skip (not installed)"; return 0
   fi
-  echo "ok: launchd live skip (not installed)"
-  exit 0
-fi
-
-grep -qE 'make up|stack-up\.sh' "$PLIST" || {
-  echo "fail: installed plist must invoke make up or stack-up.sh" >&2
-  exit 1
+  grep -q "$want" "$plist" || { echo "fail: ${label} plist must invoke ${want}" >&2; exit 1; }
+  if launchctl print "${DOMAIN}/${label}" >/dev/null 2>&1; then
+    echo "ok: launchd loaded ${label}"
+  elif launchctl list 2>/dev/null | grep -q "${label}"; then
+    echo "ok: launchd listed ${label}"
+  elif [[ "$REQUIRE" == "1" ]]; then
+    echo "fail: ${label} present but not loaded — run: make install-launchd" >&2; exit 1
+  else
+    echo "ok: ${label} live skip (present, not loaded)"
+  fi
 }
 
-if launchctl print "${DOMAIN}/${LABEL}" >/dev/null 2>&1; then
-  echo "ok: launchd loaded ${LABEL}"
-elif launchctl list 2>/dev/null | grep -q "${LABEL}"; then
-  echo "ok: launchd listed ${LABEL}"
-elif [[ "${LAUNCHD_REQUIRE:-}" == "1" ]]; then
-  echo "fail: ${LABEL} plist present but not loaded — run: make install-launchd" >&2
-  exit 1
-else
-  echo "ok: launchd live skip (plist present, not loaded)"
-fi
+check_live com.cofiswarm.host-inference start-host-inference.sh
+check_live com.cofiswarm.announcer announce-responders.sh

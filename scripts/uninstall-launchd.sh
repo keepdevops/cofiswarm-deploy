@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# Remove cofiswarm stack-up LaunchAgent.
+# Remove the cofiswarm host-side LaunchAgents (host-inference + announcer).
 set -euo pipefail
-LABEL="com.cofiswarm.stack-up"
-PLIST="${HOME}/Library/LaunchAgents/${LABEL}.plist"
-launchctl bootout "gui/$(id -u)/${LABEL}" 2>/dev/null || true
-[[ -f "$PLIST" ]] && rm -f "$PLIST"
-echo "ok: uninstalled ${LABEL}"
+for LABEL in com.cofiswarm.host-inference com.cofiswarm.announcer; do
+  PLIST="${HOME}/Library/LaunchAgents/${LABEL}.plist"
+  launchctl bootout "gui/$(id -u)/${LABEL}" 2>/dev/null || true
+  [[ -f "$PLIST" ]] && rm -f "$PLIST"
+  echo "ok: uninstalled ${LABEL}"
+done

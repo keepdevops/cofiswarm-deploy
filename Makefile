@@ -120,7 +120,8 @@ test-scale2-signoff-gate:
 render-scale2-signoff:
 	./test/scripts/render-scale2-signoff.sh
 install-launchd:
-	./scripts/install-launchd.sh
+	./scripts/install-host-inference-launchd.sh
+	./scripts/install-announcer-launchd.sh
 uninstall-launchd:
 	./scripts/uninstall-launchd.sh
 launchd-status:

@@ -18,18 +18,24 @@ make down
 
 Or via monorepo: `matrix up` / `matrix down`
 
-## Login auto-start (optional)
+## Login auto-start (reboot survival)
+
+Installs the host-side LaunchAgents `com.cofiswarm.host-inference` (relaunches the host
+llama/MLX servers) and `com.cofiswarm.announcer` (responder presence loop). The Docker
+containers carry `restart: unless-stopped` and recover on their own. Cold start the whole
+stack with `./scripts/start-stack.sh`.
 
 ```bash
-make install-launchd    # writes plist + launchctl bootstrap (required after reboot if booted out)
-make launchd-status     # plist: … / state: loaded|not loaded
+make install-launchd    # bootstrap both host-inference + announcer agents
+make launchd-status     # per-agent plist + loaded|not loaded
 LAUNCHD_REQUIRE=1 make test-launchd-live-gate
 make uninstall-launchd
 ```
 
 A plist on disk does **not** mean loaded — re-run `make install-launchd` if `state: not loaded`.
 
-Logs: `~/cofiswarm/fhs/var/log/cofiswarm/launchd-stack-up.{log,err}`
+Logs: `~/Library/Logs/cofiswarm/launchd-host-inference.{log,err}`,
+`~/Library/Logs/cofiswarm/launchd-announcer.{log,err}`
 
 ## Health checks
 
