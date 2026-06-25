@@ -23,6 +23,11 @@ services:
       # published on 18021; the per-mode port knob points dispatch's Execute at it.
       COFISWARM_MODE_FLAT_PORT: "18021"
       COFISWARM_ROUTE_BUS: ""
+      # Per-agent RAG: the rag service runs on the host (:8001); dispatch's default is
+      # 127.0.0.1 (its own loopback), so point it at the host like the llama/MLX servers.
+      # RAG is env-gated (SettingsFromEnv) — ENABLED must be set or retrieval is off.
+      COFISWARM_RAG_ENABLED: "1"
+      COFISWARM_RAG_URL: http://host.docker.internal:8001
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
