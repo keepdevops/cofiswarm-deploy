@@ -32,7 +32,6 @@ services:
       COFISWARM_MODE_CONFIG: /etc/cofiswarm/mode-flat.live.yaml
     volumes:
       - /Users/caribou/cofiswarm/repos/cofiswarm-deploy/compose/mode-configs/mode-flat.yaml:/etc/cofiswarm/mode-flat.live.yaml:ro
-      - /Users/caribou/cofiswarm/repos/cofiswarm-deploy/compose/mode-bins/cofiswarm-mode-flat:/usr/local/bin/cofiswarm-mode-flat:ro
       - /Users/caribou/cofiswarm/repos/cofiswarm-config/swarm-config.json:/etc/cofiswarm/swarm-config.json:ro
     ports:
       - "18021:8021"
@@ -43,7 +42,6 @@ services:
       COFISWARM_MODE_CONFIG: /etc/cofiswarm/mode-pipeline.live.yaml
     volumes:
       - /Users/caribou/cofiswarm/repos/cofiswarm-deploy/compose/mode-configs/mode-pipeline.yaml:/etc/cofiswarm/mode-pipeline.live.yaml:ro
-      - /Users/caribou/cofiswarm/repos/cofiswarm-deploy/compose/mode-bins/cofiswarm-mode-pipeline:/usr/local/bin/cofiswarm-mode-pipeline:ro
       - /Users/caribou/cofiswarm/repos/cofiswarm-config/swarm-config.json:/etc/cofiswarm/swarm-config.json:ro
     ports:
       - "8022:8022"
@@ -54,7 +52,6 @@ services:
       COFISWARM_MODE_CONFIG: /etc/cofiswarm/mode-cascade.live.yaml
     volumes:
       - /Users/caribou/cofiswarm/repos/cofiswarm-deploy/compose/mode-configs/mode-cascade.yaml:/etc/cofiswarm/mode-cascade.live.yaml:ro
-      - /Users/caribou/cofiswarm/repos/cofiswarm-deploy/compose/mode-bins/cofiswarm-mode-cascade:/usr/local/bin/cofiswarm-mode-cascade:ro
       - /Users/caribou/cofiswarm/repos/cofiswarm-config/swarm-config.json:/etc/cofiswarm/swarm-config.json:ro
     ports:
       - "8023:8023"
@@ -66,7 +63,6 @@ services:
     volumes:
       - /Users/caribou/cofiswarm/repos/cofiswarm-config/swarm-config.json:/etc/cofiswarm/swarm-config.json:ro
       - /Users/caribou/cofiswarm/repos/cofiswarm-deploy/compose/mode-configs/mode-router.yaml:/etc/cofiswarm/mode-router.live.yaml:ro
-      - /Users/caribou/cofiswarm/repos/cofiswarm-deploy/compose/mode-bins/cofiswarm-mode-router:/usr/local/bin/cofiswarm-mode-router:ro
     ports:
       - "8024:8024"
 
