@@ -122,6 +122,7 @@ render-scale2-signoff:
 install-launchd:
 	./scripts/install-host-inference-launchd.sh
 	./scripts/install-announcer-launchd.sh
+	./scripts/install-host-rag-launchd.sh
 uninstall-launchd:
 	./scripts/uninstall-launchd.sh
 launchd-status:

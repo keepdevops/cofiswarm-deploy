@@ -41,14 +41,26 @@ all five (4 llama.cpp + 1 MLX) idempotently, port→model per
 `cofiswarm-slot-manager/configs/endpoints.json`; it also normalizes the MLX model's
 `tokenizer_class` quirk so a fresh pull can't break mlx-scout.
 
-**Reboot survival** (run each installer once):
-- `scripts/install-host-inference-launchd.sh` → `com.cofiswarm.host-inference` (RunAtLoad +
+## Host RAG services
+
+Per-agent RAG (`use_rag` agents) needs the `cofiswarm-rag` service, which also runs on the host.
+`scripts/start-host-rag.sh` launches all three idempotently: the **nomic embeddings server**
+(:8090, `llama-server --embeddings` on `nomic-embed-text-v1.5.f16.gguf`), the **rag service**
+(:8001, serverless sqlite-vec, nomic embedder, DB at `$COFISWARM_VAR_LIB/rag/index/rag.db` —
+**non-FHS**), and the **rag-worker** (:8018). Binaries install to `/Users/Shared/cofiswarm/bin`
+(rebuilt from the repos if missing; rag needs CGO for sqlite-vec). dispatch reaches :8001 via
+`COFISWARM_RAG_URL=http://host.docker.internal:8001` + `COFISWARM_RAG_ENABLED=1` (in the override).
+
+**Reboot survival** (`make install-launchd` runs all three installers):
+- `install-host-inference-launchd.sh` → `com.cofiswarm.host-inference` (RunAtLoad +
   AbandonProcessGroup): relaunches the 5 inference servers at login.
-- `scripts/install-announcer-launchd.sh` → `com.cofiswarm.announcer` (RunAtLoad + KeepAlive):
+- `install-host-rag-launchd.sh` → `com.cofiswarm.host-rag` (RunAtLoad + AbandonProcessGroup):
+  relaunches nomic-embed + rag + worker at login.
+- `install-announcer-launchd.sh` → `com.cofiswarm.announcer` (RunAtLoad + KeepAlive):
   keeps the broker-free responder presence loop alive across reboots/crashes.
 - The Docker containers carry `restart: unless-stopped`, so Docker Desktop restores them on boot.
 
-Together these three cover the whole stack on reboot; nothing needs a manual bring-up.
+Together these cover the whole stack on reboot; nothing needs a manual bring-up.
 
 ## One-command bring-up
 
