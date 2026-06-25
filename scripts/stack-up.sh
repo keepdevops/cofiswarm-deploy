@@ -22,6 +22,10 @@ export COFISWARM_COORDINATOR_CONFIG="${FHS}/etc/cofiswarm/config/coordinator.jso
 export COFISWARM_MODELS_MANIFEST="${REPOS}/cofiswarm-models/catalog/manifest.json"
 export COFISWARM_RAG_URL="http://127.0.0.1:8001"
 export COFISWARM_SLOT_MANAGER_URL="http://127.0.0.1:8013"
+# Telemetry: buspresence publishers (dispatch, agent-registry, …) announce presence/alerts
+# to the zmq-bridge control plane (:5555), which re-emits them on the ZMQ carrier egress for
+# the observer. Without this the wire is live but idle. Empty disables publishing.
+export COFISWARM_BRIDGE_URL="${COFISWARM_BRIDGE_URL:-http://127.0.0.1:5555}"
 # RAG is serverless (sqlite-vec) — a file under FHS, no Postgres container.
 export RAG_STORE="${RAG_STORE:-sqlite}"
 export RAG_SQLITE_PATH="${RAG_SQLITE_PATH:-${FHS}/var/lib/cofiswarm/rag/index/rag.db}"
@@ -196,9 +200,9 @@ SVC_ENV=(COFISWARM_BUS=zmq "COFISWARM_ZMQ_ADDR=tcp://*:5556" "COFISWARM_ZMQ_EGRE
 start_svc zmq-bridge "${REPOS}/cofiswarm-zmq-bridge/bin/cofiswarm-zmq-bridge" \
   -topics "${REPOS}/cofiswarm-zmq-bridge/spec/topics.yaml"
 SVC_ENV=()
-# observer subscribes to the carrier egress (:5557) for the live view; the bridge URL
-# carries presence republish + SSE fallback.
-SVC_ENV=(COFISWARM_ZMQ_EGRESS_ADDR=tcp://127.0.0.1:5557 COFISWARM_BRIDGE_URL=http://127.0.0.1:5555)
+# observer subscribes to the carrier egress (:5557) for the live view; COFISWARM_BRIDGE_URL
+# (exported above) carries presence republish + SSE fallback.
+SVC_ENV=(COFISWARM_ZMQ_EGRESS_ADDR=tcp://127.0.0.1:5557)
 start_svc observer "${REPOS}/cofiswarm-observer/bin/cofiswarm-observer" -listen :8016
 SVC_ENV=()
 start_svc convert "${REPOS}/cofiswarm-convert/bin/cofiswarm-convert" -listen :8015
