@@ -41,13 +41,16 @@ fi
 [[ -f "${CFG_REPO}/coordinator.json" ]] && \
   cp "${CFG_REPO}/coordinator.json" "${FHS}/etc/cofiswarm/config/"
 
-if [[ -f "${CFG_REPO}/scripts/build_swarm_config.py" ]]; then
-  python3 "${CFG_REPO}/scripts/build_swarm_config.py" --root "${CFG_REPO}"
+if [[ -x "${CFG_REPO}/bin/cofiswarm-config" ]]; then
+  "${CFG_REPO}/bin/cofiswarm-config" build --root "${CFG_REPO}"
+  cp "${CFG_REPO}/swarm-config.json" "${FHS}/etc/cofiswarm/config/swarm-config.json"
+elif [[ -f "${CFG_REPO}/swarm-config.json" ]]; then
+  # build tool not built — use the committed swarm-config.json as-is.
   cp "${CFG_REPO}/swarm-config.json" "${FHS}/etc/cofiswarm/config/swarm-config.json"
 elif [[ -f "${FHS}/etc/cofiswarm/config/swarm-config.json" ]]; then
   echo "keep existing swarm-config.json"
 else
-  echo "warn: no cofiswarm-config build script" >&2
+  echo "warn: no cofiswarm-config build tool or swarm-config.json" >&2
 fi
 
 if [[ -f "${ROOT}/config/profiles/${PROFILE}.env" ]]; then
