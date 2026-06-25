@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.cofiswarm.host-control</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>-lc</string>
+    <string>"${COFISWARM_DEPLOY:-$HOME/cofiswarm/repos/cofiswarm-deploy}/scripts/start-host-control.sh"</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <!-- Launches the sidecars detached and exits; keep them alive after it returns. -->
+  <key>AbandonProcessGroup</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>${HOME}/Library/Logs/cofiswarm/launchd-host-control.log</string>
+  <key>StandardErrorPath</key>
+  <string>${HOME}/Library/Logs/cofiswarm/launchd-host-control.err</string>
+</dict>
+</plist>

@@ -2,7 +2,7 @@
 # Print launchd install/load state for the cofiswarm host-side LaunchAgents.
 set -euo pipefail
 DOMAIN="gui/$(id -u)"
-for LABEL in com.cofiswarm.host-inference com.cofiswarm.announcer com.cofiswarm.host-rag; do
+for LABEL in com.cofiswarm.host-inference com.cofiswarm.announcer com.cofiswarm.host-rag com.cofiswarm.host-control; do
   PLIST="${HOME}/Library/LaunchAgents/${LABEL}.plist"
   echo "== ${LABEL} =="
   if [[ -f "$PLIST" ]]; then echo "  plist: $PLIST"; else echo "  plist: not installed"; fi

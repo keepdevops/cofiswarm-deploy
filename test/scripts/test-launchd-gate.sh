@@ -36,5 +36,8 @@ check_agent com.cofiswarm.announcer \
 check_agent com.cofiswarm.host-rag \
   "${ROOT}/deploy/launchd/com.cofiswarm.host-rag.plist.template" \
   "${ROOT}/scripts/install-host-rag-launchd.sh"
+check_agent com.cofiswarm.host-control \
+  "${ROOT}/deploy/launchd/com.cofiswarm.host-control.plist.template" \
+  "${ROOT}/scripts/install-host-control-launchd.sh"
 
 echo "ok: launchd ops gate"

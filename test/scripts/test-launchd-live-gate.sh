@@ -27,3 +27,4 @@ check_live() { # label expect-invocation-substr
 check_live com.cofiswarm.host-inference start-host-inference.sh
 check_live com.cofiswarm.announcer announce-responders.sh
 check_live com.cofiswarm.host-rag start-host-rag.sh
+check_live com.cofiswarm.host-control start-host-control.sh
