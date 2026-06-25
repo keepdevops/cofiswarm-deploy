@@ -36,6 +36,17 @@ mode-router`; no `go.work` replace or bind-mounted binaries required.
 
 ## Host inference servers
 
-Not part of compose — launch on the host. See the `cofiswarm-host-llama-and-option-b` notes
-(binary `/Users/Shared/llama/llama.cpp-master/build/bin/llama-server`, ports per
-`cofiswarm-slot-manager/configs/endpoints.json`; MLX via `mlx_lm server`).
+Not part of compose — they run on the host (Metal). `scripts/start-host-inference.sh` launches
+all five (4 llama.cpp + 1 MLX) idempotently, port→model per
+`cofiswarm-slot-manager/configs/endpoints.json`; it also normalizes the MLX model's
+`tokenizer_class` quirk so a fresh pull can't break mlx-scout.
+
+**Reboot survival:** `bash scripts/install-host-inference-launchd.sh` installs the
+`com.cofiswarm.host-inference` LaunchAgent (RunAtLoad), which runs that script at login.
+
+## One-command bring-up
+
+`scripts/start-stack.sh` cold-starts the whole stack in order — host inference → Docker control
+plane (launcher compose + this overlay) → responder presence announcer — then health-gates all
+endpoints. Idempotent. (The Docker containers carry `restart: unless-stopped`, so they self-heal
+across reboots on their own; this script is for cold starts and manual bring-up.)
