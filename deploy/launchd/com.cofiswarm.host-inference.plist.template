@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.cofiswarm.host-inference</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>-lc</string>
+    <string>"${COFISWARM_DEPLOY:-$HOME/cofiswarm/repos/cofiswarm-deploy}/scripts/start-host-inference.sh"</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <!-- The script launches the servers detached and exits; keep them alive after it returns. -->
+  <key>AbandonProcessGroup</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>${HOME}/Library/Logs/cofiswarm/launchd-host-inference.log</string>
+  <key>StandardErrorPath</key>
+  <string>${HOME}/Library/Logs/cofiswarm/launchd-host-inference.err</string>
+</dict>
+</plist>
