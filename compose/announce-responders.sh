@@ -19,6 +19,9 @@ RESPONDERS=(
   "responder-pipeline:pipeline"
   "responder-cascade:cascade"
   "responder-router:router"
+  # cofiswarm-ui is an nginx-served React frontend (:3000) — it can't self-announce, so we
+  # publish its presence here too (broker-free), same as the NATS-only responders.
+  "ui:web-ui"
 )
 
 publish() { # id status name
