@@ -19,6 +19,7 @@ services:
       COFISWARM_BUS: zmq
       COFISWARM_ZMQ_ADDR: tcp://*:5556        # ingress: component PUBs -> carrier
       COFISWARM_ZMQ_EGRESS_ADDR: tcp://*:5557 # egress: carrier -> observer SUB
+      COFISWARM_ZMQ_REQ_ADDR: tcp://*:5558    # request/reply: ROUTER for bus-responders
       COFISWARM_ZMQ_TOPICS: /etc/cofiswarm/zmq/topics.yaml
     command: ["--listen", ":5555"]
     volumes:
@@ -27,6 +28,7 @@ services:
       - "5555:5555"   # HTTP control plane: /v1/publish, /v1/stream, /healthz
       - "5556:5556"   # ZMQ ingress wire
       - "5557:5557"   # ZMQ egress wire
+      - "5558:5558"   # ZMQ request/reply wire (ROUTER); container responders also reach it via compose DNS
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1:5555/healthz"]
       interval: 10s

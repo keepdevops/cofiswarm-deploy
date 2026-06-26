@@ -15,12 +15,43 @@ docker compose -f docker-compose.yml -f "$OV" up -d \
 
 - **dispatch** — `COFISWARM_AGENT_HOST=host.docker.internal` (per-agent llama caller),
   `COFISWARM_MODE_HOST` + published mode ports (mode Execute), `COFISWARM_ROUTE_BUS=""`
-  (the zmq bridge has no request/reply → route modes over direct HTTP). mode-flat is
+  (default: route modes over direct HTTP). mode-flat is
   remapped to host **18021** because host 8021 is owned by the host `ob_code` Python stack.
 - **mode-\*** — mounted `mode-configs/mode-<n>.yaml` (`infer_host: host.docker.internal`,
   `swarm_config_path`) + the 14-agent `cofiswarm-config/swarm-config.json`, plus
   `extra_hosts: host.docker.internal:host-gateway`.
 - **slot-manager** — `ports: !reset []` (internal-only; host 8013 is taken).
+
+## Optional: route modes over the ZMQ bus (request/reply)
+
+The zmq bridge now has a request/reply leg (ROUTER on `:5558`, see
+`cofiswarm-zmq-bridge` README). Overlay `mode-bus-responders.override.yml` flips dispatch to
+`COFISWARM_ROUTE_BUS=1` and switches the launcher's `responder-{flat,pipeline,cascade,router}`
+from NATS to zmq (`COFISWARM_BUS=zmq`, dialing `zmq-bridge:5558`). Then `dispatch.Execute`
+routes `swarm.observer.mode.<mode>` through `POST /v1/request`; a dead responder surfaces as
+503/504 instead of a direct-HTTP error. Enable at bring-up:
+
+```
+COFISWARM_ROUTE_BUS_MODES=1 scripts/start-stack.sh
+```
+
+Or manually, appending the overlay + responders to the launcher invocation (see the header of
+`compose/mode-bus-responders.override.yml`). Reversible: omit the overlay to fall back to
+direct HTTP. The 4 mode responders self-announce presence, so they no longer need the
+`announce-responders.sh` fakes (model responders + the UI still do).
+
+## Optional: native ZMQ PUB presence
+
+By default components publish presence over HTTP `/v1/publish`. Overlay
+`native-pub.override.yml` sets `COFISWARM_ZMQ_PUBLISH_ADDR=tcp://zmq-bridge:5556` on the
+self-announcing components (dispatch, slot-manager, kvpool, the 4 modes) so their
+`buspresence.StartPresence` publishes over a native ZMQ PUB socket to the bridge ingress wire
+instead. Enable with `COFISWARM_NATIVE_PUB=1 scripts/start-stack.sh`.
+
+Prerequisite: the component image must be built against an `observer-sdk` that includes native
+PUB (observer-sdk PR #2 / its tag). Until then the env is ignored (older `StartPresence` keeps
+using HTTP), so it's harmless to set early. agent-registry is excluded — its roster
+`AnnounceMembers` still uses HTTP (native PUB covers single-component presence only).
 
 ## Mode images
 
