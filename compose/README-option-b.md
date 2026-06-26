@@ -40,6 +40,19 @@ Or manually, appending the overlay + responders to the launcher invocation (see 
 direct HTTP. The 4 mode responders self-announce presence, so they no longer need the
 `announce-responders.sh` fakes (model responders + the UI still do).
 
+## Optional: native ZMQ PUB presence
+
+By default components publish presence over HTTP `/v1/publish`. Overlay
+`native-pub.override.yml` sets `COFISWARM_ZMQ_PUBLISH_ADDR=tcp://zmq-bridge:5556` on the
+self-announcing components (dispatch, slot-manager, kvpool, the 4 modes) so their
+`buspresence.StartPresence` publishes over a native ZMQ PUB socket to the bridge ingress wire
+instead. Enable with `COFISWARM_NATIVE_PUB=1 scripts/start-stack.sh`.
+
+Prerequisite: the component image must be built against an `observer-sdk` that includes native
+PUB (observer-sdk PR #2 / its tag). Until then the env is ignored (older `StartPresence` keeps
+using HTTP), so it's harmless to set early. agent-registry is excluded — its roster
+`AnnounceMembers` still uses HTTP (native PUB covers single-component presence only).
+
 ## Mode images
 
 `cofiswarm-mode-sdk v1.2.3` (which adds `infer_host`/`swarm_config_path` + the `/v1/models`

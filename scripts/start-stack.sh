@@ -31,6 +31,12 @@ if [[ "${COFISWARM_ROUTE_BUS_MODES:-0}" == "1" ]]; then
              responder-coder7b responder-llama8b responder-gemma9b responder-gemma2b responder-mlx1b)
   echo "    bus routing ON: modes + inference route over zmq :5558 (all responders enabled)"
 fi
+# Opt-in: COFISWARM_NATIVE_PUB=1 publishes self-announce presence over native ZMQ PUB (:5556)
+# instead of HTTP /v1/publish (requires components built against observer-sdk native-PUB).
+if [[ "${COFISWARM_NATIVE_PUB:-0}" == "1" ]]; then
+  COMPOSE_FILES+=(-f "$ROOT/compose/native-pub.override.yml")
+  echo "    native PUB ON: self-announce presence publishes over zmq :5556"
+fi
 ( cd "$LAUNCHER" && docker compose "${COMPOSE_FILES[@]}" up -d --no-build --no-deps "${SERVICES[@]}" )
 
 echo "==> 3/3 responder presence announcer"

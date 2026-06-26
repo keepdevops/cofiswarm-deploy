@@ -1,0 +1,37 @@
+# Opt-in overlay: publish component presence over a NATIVE ZMQ PUB socket (to the bridge ingress
+# wire :5556) instead of HTTP /v1/publish.
+#
+# How it works: observer-sdk's buspresence.StartPresence switches transport when
+# COFISWARM_ZMQ_PUBLISH_ADDR is set — it PUB-dials the bridge ingress and re-announces on a timer
+# (the PUB/SUB analogue of HTTP hello-watch). The bridge ingress SUB (:5556) already collects
+# these frames and forwards them to the observer, so no bridge change is needed.
+#
+# PREREQUISITE: the component image must be built against observer-sdk INCLUDING native PUB
+# (cofiswarm-observer-sdk PR #2 / the tag that lands it). Until a component is rebuilt against
+# that SDK, its older StartPresence ignores COFISWARM_ZMQ_PUBLISH_ADDR and keeps using HTTP — so
+# adding this env is forward-compatible and harmless to apply early.
+#
+# SCOPE: only components that SELF-announce via StartPresence are wired here. agent-registry is
+# deliberately excluded: it announces the 14-agent roster via AnnounceMembers, which still uses
+# HTTP /v1/publish (the native PUB path covers single-component presence only).
+#
+# Enable: COFISWARM_NATIVE_PUB=1 scripts/start-stack.sh   (appends this overlay). Reversible:
+# omit it and presence falls back to HTTP.
+x-native-pub: &native-pub
+  COFISWARM_ZMQ_PUBLISH_ADDR: tcp://zmq-bridge:5556
+
+services:
+  dispatch:
+    environment: { <<: *native-pub }
+  slot-manager:
+    environment: { <<: *native-pub }
+  kvpool:
+    environment: { <<: *native-pub }
+  mode-flat:
+    environment: { <<: *native-pub }
+  mode-pipeline:
+    environment: { <<: *native-pub }
+  mode-cascade:
+    environment: { <<: *native-pub }
+  mode-router:
+    environment: { <<: *native-pub }
