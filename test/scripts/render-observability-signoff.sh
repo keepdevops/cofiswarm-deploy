@@ -26,7 +26,7 @@ md = f"""# Observability sign-off
 | Gate | Scope |
 |------|-------|
 | `test-observability-gate` | observer plugins, grafana layout, /metrics |
-| `test-zmq-bridge-gate` | topics + publish |
+| `test-zmq-bridge-gate` | topics + publish + real egress wire (native SUB on :5557) |
 | `test-prometheus-up-gate` | scrape + PromQL + Grafana |
 
 ```bash
