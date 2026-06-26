@@ -50,6 +50,10 @@ services:
     environment:
       COFISWARM_ZMQ_EGRESS_ADDR: tcp://zmq-bridge:5557 # subscribe to carrier egress
       COFISWARM_BRIDGE_URL: http://zmq-bridge:5555      # presence republish + SSE fallback
+      # /metrics scrapes KV pressure from slot-manager. The default 127.0.0.1:8013 is the
+      # observer container itself; point it at the carrier-internal slot-manager so the
+      # cofiswarm_kv_pressure_usage gauge actually gets samples (else: connection refused).
+      COFISWARM_SLOT_MANAGER_URL: http://slot-manager:8013
       # Docker-stats widget reads through the read-only socket proxy (no raw socket / root here).
       COFISWARM_DOCKER_HOST: http://docker-socket-proxy:2375
     volumes:

@@ -80,8 +80,14 @@ services:
   # base list (Compose concatenates ports otherwise, so a plain [] would not remove 8013:8013).
   slot-manager:
     ports: !reset []
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       COFISWARM_BRIDGE_URL: http://zmq-bridge:5555   # announce presence to the observer
+      # Roster hosts are 127.0.0.1 in the repo config (correct for host/native runs); inside
+      # this container that's the container itself. Rewrite to the host so pressure polling
+      # reaches the host llama/MLX servers (mirrors dispatch/modes' COFISWARM_AGENT_HOST).
+      COFISWARM_ENDPOINT_HOST: host.docker.internal
 
   # kvpool announces presence too (not in the base override before).
   kvpool:
