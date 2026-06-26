@@ -11,9 +11,10 @@
 # that SDK, its older StartPresence ignores COFISWARM_ZMQ_PUBLISH_ADDR and keeps using HTTP — so
 # adding this env is forward-compatible and harmless to apply early.
 #
-# SCOPE: only components that SELF-announce via StartPresence are wired here. agent-registry is
-# deliberately excluded: it announces the 14-agent roster via AnnounceMembers, which still uses
-# HTTP /v1/publish (the native PUB path covers single-component presence only).
+# SCOPE: every component whose presence publishes through observer-sdk — both StartPresence
+# callers and direct buspresence.New() Publisher callers (dispatch, agent-registry). Since
+# observer-sdk v1.4.1 the Publisher is PUB-aware, so agent-registry's 14-agent roster
+# (AnnounceMembers) also flows over native PUB. (Components must be built against v1.4.x.)
 #
 # Enable: COFISWARM_NATIVE_PUB=1 scripts/start-stack.sh   (appends this overlay). Reversible:
 # omit it and presence falls back to HTTP.
@@ -22,6 +23,8 @@ x-native-pub: &native-pub
 
 services:
   dispatch:
+    environment: { <<: *native-pub }
+  agent-registry:
     environment: { <<: *native-pub }
   slot-manager:
     environment: { <<: *native-pub }
