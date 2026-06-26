@@ -121,6 +121,7 @@ render-scale2-signoff:
 	./test/scripts/render-scale2-signoff.sh
 install-launchd:
 	./scripts/install-host-inference-launchd.sh
+	./scripts/install-host-inference-watchdog-launchd.sh
 	./scripts/install-announcer-launchd.sh
 	./scripts/install-host-rag-launchd.sh
 	./scripts/install-host-control-launchd.sh

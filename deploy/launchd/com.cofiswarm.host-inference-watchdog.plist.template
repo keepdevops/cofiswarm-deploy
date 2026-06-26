@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.cofiswarm.host-inference-watchdog</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>-lc</string>
+    <string>"${COFISWARM_DEPLOY:-$HOME/cofiswarm/repos/cofiswarm-deploy}/scripts/watch-host-inference.sh"</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <!-- Periodic (every 60s) health probe of the host inference ports 8083-8087. The RunAtLoad
+       host-inference agent starts the servers once at login but never restarts a crashed one;
+       this watchdog detects the dead port and re-runs the idempotent start-host-inference.sh so
+       a crashed backend self-heals instead of silently dropping its agents. Short-lived per
+       fire — StartInterval, not KeepAlive. -->
+  <key>StartInterval</key>
+  <integer>60</integer>
+  <key>StandardOutPath</key>
+  <string>${HOME}/Library/Logs/cofiswarm/launchd-watchdog.log</string>
+  <key>StandardErrorPath</key>
+  <string>${HOME}/Library/Logs/cofiswarm/launchd-watchdog.err</string>
+</dict>
+</plist>
