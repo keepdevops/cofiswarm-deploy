@@ -28,6 +28,11 @@ services:
       # RAG is env-gated (SettingsFromEnv) — ENABLED must be set or retrieval is off.
       COFISWARM_RAG_ENABLED: "1"
       COFISWARM_RAG_URL: http://host.docker.internal:8001
+      # dispatch's compat /api/swarm-config (served to the UI) reads this file; without the
+      # mount below it 404s. Point it at the roster mounted from cofiswarm-config, like the modes.
+      COFISWARM_SWARM_CONFIG: /etc/cofiswarm/swarm-config.json
+    volumes:
+      - /Users/caribou/cofiswarm/repos/cofiswarm-config/swarm-config.json:/etc/cofiswarm/swarm-config.json:ro
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
