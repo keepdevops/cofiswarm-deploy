@@ -1,0 +1,73 @@
+# Opt-in overlay: route BOTH mode execution AND agent inference over the ZMQ request/reply
+# plane instead of direct HTTP.
+#
+# Prereq: the zmq request/reply leg (cofiswarm-zmq-bridge >= 2026-06-26). The bridge binds a
+# ROUTER on :5558 (set in stack.yml: COFISWARM_ZMQ_REQ_ADDR=tcp://*:5558).
+#
+# dispatch's COFISWARM_ROUTE_BUS knob flips BOTH paths at once:
+#   - mode Execute   -> POST /v1/request swarm.observer.mode.<mode>  -> responder-<mode>
+#   - agent inference-> POST /v1/request swarm.observer.model.<port> -> responder-<group>
+# So this overlay must bring up ALL the responders, or the un-served path 503s.
+#
+# The launcher compose already defines responder-{flat,pipeline,cascade,router} (mode) and
+# responder-{coder7b,llama8b,gemma9b,gemma2b,mlx1b} (model), wired for NATS. The bus-responder
+# binary branches on COFISWARM_BUS, so this overlay flips them to zmq. The MODEL responders also
+# get a port-keyed subject (dispatch keys inference by the agent's port, swarm.observer.model.<port>,
+# not the group name), replacing the base group-name subject. Each DEALER-registers on the bridge
+# ROUTER, heartbeats, relays to its backend, and self-announces presence to the observer.
+#
+# WITHOUT this overlay the base option-B override keeps COFISWARM_ROUTE_BUS="" and uses direct
+# HTTP — so this is additive and reversible.
+#
+# Start: COFISWARM_ROUTE_BUS_MODES=1 scripts/start-stack.sh   (names all responders explicitly so
+# their 16gb/32gb profile activates; --no-deps keeps the skipped nats out).
+x-zmq-responder-env: &zmq-responder-env
+  COFISWARM_NATS_URL: ""                          # unset: not the NATS transport
+  COFISWARM_BUS: zmq                              # branch the bus-responder to the zmq DEALER
+  COFISWARM_ZMQ_REQ_ADDR: tcp://zmq-bridge:5558   # dial the bridge ROUTER leg (compose DNS)
+  COFISWARM_BRIDGE_URL: http://zmq-bridge:5555     # announce presence to the observer
+
+services:
+  # dispatch: route mode Execute + agent inference over the bus. busRouteURL() needs BOTH knobs.
+  dispatch:
+    environment:
+      COFISWARM_ROUTE_BUS: "1"
+      COFISWARM_BRIDGE_URL: http://zmq-bridge:5555
+
+  # --- mode responders: flip to zmq; subject/backend already correct in the base. ---
+  responder-flat:
+    depends_on: !override [mode-flat]
+    environment: *zmq-responder-env
+  responder-pipeline:
+    depends_on: !override [mode-pipeline]
+    environment: *zmq-responder-env
+  responder-cascade:
+    depends_on: !override [mode-cascade]
+    environment: *zmq-responder-env
+  responder-router:
+    depends_on: !override [mode-router]
+    environment: *zmq-responder-env
+
+  # --- model responders: flip to zmq AND re-key the subject to the port (matches dispatch's
+  # modelSubject = swarm.observer.model.<port>). Backends are the host llama/MLX servers; the
+  # base already carries extra_hosts host.docker.internal. depends_on cleared (host, not compose). ---
+  responder-coder7b:
+    depends_on: !override []
+    environment: *zmq-responder-env
+    command: ["-name", "coder7b", "-subject", "swarm.observer.model.8086", "-backend", "http://host.docker.internal:8086/v1/chat/completions"]
+  responder-llama8b:
+    depends_on: !override []
+    environment: *zmq-responder-env
+    command: ["-name", "llama8b", "-subject", "swarm.observer.model.8085", "-backend", "http://host.docker.internal:8085/v1/chat/completions"]
+  responder-gemma9b:
+    depends_on: !override []
+    environment: *zmq-responder-env
+    command: ["-name", "gemma9b", "-subject", "swarm.observer.model.8084", "-backend", "http://host.docker.internal:8084/v1/chat/completions"]
+  responder-gemma2b:
+    depends_on: !override []
+    environment: *zmq-responder-env
+    command: ["-name", "gemma2b", "-subject", "swarm.observer.model.8087", "-backend", "http://host.docker.internal:8087/v1/chat/completions"]
+  responder-mlx1b:
+    depends_on: !override []
+    environment: *zmq-responder-env
+    command: ["-name", "mlx1b", "-subject", "swarm.observer.model.8083", "-backend", "http://host.docker.internal:8083/v1/chat/completions"]

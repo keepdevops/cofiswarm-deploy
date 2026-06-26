@@ -20,10 +20,18 @@ echo "==> 1/3 host inference servers"
 
 echo "==> 2/3 Docker control plane (launcher + option-B overlay)"
 # --no-deps + explicit list: the observability plane (observer/zmq-bridge/gateway from
-# stack.yml) is already running; nats is intentionally skipped (zmq plan, no request/reply).
-( cd "$LAUNCHER" && docker compose -f docker-compose.yml -f "$OVERRIDE" up -d --no-build --no-deps \
-    agent-registry kvpool slot-manager dispatch \
-    mode-flat mode-pipeline mode-cascade mode-router )
+# stack.yml) is already running; nats is intentionally skipped (zmq plan).
+# Opt-in: COFISWARM_ROUTE_BUS_MODES=1 adds the zmq request/reply overlay so dispatch routes
+# BOTH mode execution and agent inference over the bus, bringing up all mode + model responders.
+COMPOSE_FILES=(-f docker-compose.yml -f "$OVERRIDE")
+SERVICES=(agent-registry kvpool slot-manager dispatch mode-flat mode-pipeline mode-cascade mode-router)
+if [[ "${COFISWARM_ROUTE_BUS_MODES:-0}" == "1" ]]; then
+  COMPOSE_FILES+=(-f "$ROOT/compose/mode-bus-responders.override.yml")
+  SERVICES+=(responder-flat responder-pipeline responder-cascade responder-router \
+             responder-coder7b responder-llama8b responder-gemma9b responder-gemma2b responder-mlx1b)
+  echo "    bus routing ON: modes + inference route over zmq :5558 (all responders enabled)"
+fi
+( cd "$LAUNCHER" && docker compose "${COMPOSE_FILES[@]}" up -d --no-build --no-deps "${SERVICES[@]}" )
 
 echo "==> 3/3 responder presence announcer"
 if pgrep -f announce-responders.sh >/dev/null 2>&1; then
