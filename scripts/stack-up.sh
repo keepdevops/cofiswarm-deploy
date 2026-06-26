@@ -193,8 +193,9 @@ start_dispatch
 wait_port 8010 dispatch || true
 start_svc agent-registry "${REPOS}/cofiswarm-agent-registry/bin/cofiswarm-agent-registry" \
   -swarm-config "${COFISWARM_SWARM_CONFIG}" -state "${FHS}/var/lib/cofiswarm/agent-registry/overrides.json"
+# slot-manager is standalone (no FHS coupling) — point it at its repo config, not /etc/cofiswarm.
 start_svc slot-manager "${REPOS}/cofiswarm-slot-manager/bin/cofiswarm-slot-manager" \
-  -config "${FHS}/etc/cofiswarm/slot-manager/endpoints.json"
+  -config "${REPOS}/cofiswarm-slot-manager/configs/endpoints.json"
 start_svc kvpool "${REPOS}/cofiswarm-kvpool/bin/cofiswarm-kvpool"
 start_svc configure "${REPOS}/cofiswarm-launcher/bin/cofiswarm-configure" -listen :8017
 wait_port 8017 configure || true

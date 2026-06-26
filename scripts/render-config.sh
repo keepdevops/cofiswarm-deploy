@@ -57,8 +57,9 @@ if [[ -f "${ROOT}/config/profiles/${PROFILE}.env" ]]; then
   cp "${ROOT}/config/profiles/${PROFILE}.env" "${FHS}/etc/cofiswarm/profiles/active.env"
 fi
 
-# Mirror per-service configs from repos when present
-for svc in slot-manager kvpool agent-registry dispatch mode-flat mode-pipeline mode-cascade mode-router; do
+# Mirror per-service configs from repos when present.
+# slot-manager is standalone (reads its own repo config, no FHS) — intentionally excluded.
+for svc in kvpool agent-registry dispatch mode-flat mode-pipeline mode-cascade mode-router; do
   src="${REPOS}/cofiswarm-${svc}/test/standalone/etc/cofiswarm/${svc}"
   [[ -d "$src" ]] && install -d "${FHS}/etc/cofiswarm/${svc}" && cp -R "${src}/." "${FHS}/etc/cofiswarm/${svc}/" 2>/dev/null || true
 done
