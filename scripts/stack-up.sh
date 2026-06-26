@@ -43,6 +43,11 @@ COMPOSE=(docker compose -f compose/stack.yml -f "compose/profiles/${PROFILE}.yml
 LOGDIR="${FHS}/var/log/cofiswarm/host-services"
 mkdir -p "$LOGDIR" "${COFISWARM_RUN_ROOT}"
 
+# Services whose binary was missing are collected here and reported loudly at the
+# end — a silent "skip" must not read as a healthy bring-up. `make up` builds all
+# binaries first (build-all), so this should be empty on the one-command path.
+SKIPPED=()
+
 wait_port() {
   local port="$1" name="$2" tries="${3:-40}"
   for _ in $(seq 1 "$tries"); do
@@ -120,7 +125,7 @@ restart_if_stale() {
 start_svc() {
   local name="$1" bin="$2"
   shift 2
-  [[ -x "$bin" ]] || { echo "skip: $name (no binary $bin)"; return 0; }
+  [[ -x "$bin" ]] || { echo "skip: $name (no binary $bin)"; SKIPPED+=("$name"); return 0; }
   if [[ -f "${COFISWARM_RUN_ROOT}/${name}.pid" ]] && kill -0 "$(cat "${COFISWARM_RUN_ROOT}/${name}.pid")" 2>/dev/null; then
     if [[ "$bin" -nt "${COFISWARM_RUN_ROOT}/${name}.pid" ]]; then
       kill "$(cat "${COFISWARM_RUN_ROOT}/${name}.pid")" 2>/dev/null || true
@@ -157,7 +162,7 @@ restart_if_stale dispatch "$MODE_PORTS_FILE"
 
 start_dispatch() {
   local name=dispatch bin="${REPOS}/cofiswarm-dispatch/bin/cofiswarm-dispatch"
-  [[ -x "$bin" ]] || { echo "skip: $name (no binary $bin)"; return 0; }
+  [[ -x "$bin" ]] || { echo "skip: $name (no binary $bin)"; SKIPPED+=("$name"); return 0; }
   if [[ -f "${COFISWARM_RUN_ROOT}/${name}.pid" ]] && kill -0 "$(cat "${COFISWARM_RUN_ROOT}/${name}.pid")" 2>/dev/null; then
     if [[ "$bin" -nt "${COFISWARM_RUN_ROOT}/${name}.pid" ]]; then
       kill "$(cat "${COFISWARM_RUN_ROOT}/${name}.pid")" 2>/dev/null || true
@@ -233,4 +238,10 @@ export COFISWARM_CONFIG_ROOT="${FHS}/etc/cofiswarm/config"
 start_svc orchestrate "${REPOS}/cofiswarm-orchestrate/bin/orch-sidecar" -host 0.0.0.0 -port 3003
 wait_port 3003 orchestrate || true
 
-echo "==> stack up complete (profile=${PROFILE})"
+if ((${#SKIPPED[@]} > 0)); then
+  echo "" >&2
+  echo "WARNING: ${#SKIPPED[@]} host service(s) skipped — binary missing: ${SKIPPED[*]}" >&2
+  echo "  These did NOT start. Build them with: make build-all   (or use 'make up')." >&2
+  echo "" >&2
+fi
+echo "==> stack up complete (profile=${PROFILE}, skipped=${#SKIPPED[@]})"
